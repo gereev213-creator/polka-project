@@ -1,0 +1,25 @@
+# Секреты и локальные конфиги
+collector/config.json
+.env
+*.env
+.env.*
+
+# Сборки и зависимости
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.vite/
+
+# Данные и состояние сборщика
+collector/cookies.json
+collector/targets_state.json
+*.sqlite
+*.sqlite3
+*.db
+data/
+
+# Мусор ОС и IDE
+.DS_Store
+.idea/

@@ -1,0 +1,32 @@
+{
+  "_пояснение": "?s=104 — сортировка по дате: в выдаче только что опубликованные. 16 категорий по всей России. Что ловить — решают критерии.",
+  "server": "https://polka-mini-app-nikicev2009.mia0.amvera.tech",
+  "token": "ВСТАВЬТЕ_ТОКЕН_ЗДЕСЬ",
+  "targets": [
+    {
+      "source": "avito",
+      "url": "https://www.avito.ru/all/telefony?s=104",
+      "city": "Россия",
+      "category": "Электроника"
+    },
+    {
+      "source": "avito",
+      "url": "https://www.avito.ru/all/noutbuki?s=104",
+      "city": "Россия",
+      "category": "Электроника"
+    },
+    {
+      "source": "avito",
+      "url": "https://www.avito.ru/all/planshety_i_elektronnye_knigi?s=104",
+      "city": "Россия",
+      "category": "Электроника"
+    }
+  ],
+  "filters_by_category": {
+    "odezhda_obuv_aksessuary": "&f=ASgBAgICA0TeAtgL4ALeC~K8DfDRNA",
+    "telefony": "&f=ASgBAQECAkS0wA3OqzmwwQ2I_DcBQIKhEhUZ0L3QtSDQstGB0LrRgNGL0LLQsNC70YHRjwFFgu4OFXsiZnJvbSI6ODAsInRvIjpudWxsfQ"
+  },
+  "admin_token": "ВСТАВЬТЕ_АДМИН_ТОКЕН_ЗДЕСЬ",
+  "pages": 1,
+  "max_targets": 40
+}

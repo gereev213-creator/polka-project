@@ -1,0 +1,6398 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   MG-CORE — единственный владелец оформления по эталону MemGift.
+   Правила:
+     • подключается ПОСЛЕДНИМ в main.jsx, поэтому побеждает порядком, а не силой;
+     • здесь НЕТ !important — если правило не срабатывает, значит в старом файле
+       осталось !important, и его нужно убрать там, а не давить здесь;
+     • один класс — одно определение. Начинаем с семейства «кнопки-синие».
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Синяя кнопка (cta-primary / primary-btn / cta-button) ─────────────
+   Значения из эталона владельца (memgift_кнопка_и_список.html):
+     градиент  #1f78ff → #0a62f0
+     высота    52 (в эталоне 104 при --mg-u:.5px)
+     кромка    1px сверху rgba(255,255,255,.28) — только сверху
+     радиус    полная таблетка 999
+     нажатие   brightness(.94), без движения
+     disabled  opacity .5                                                        */
+.app-shell .cta-primary, .cta-primary,
+.app-shell .primary-btn, .primary-btn,
+.app-shell .cta-button, .cta-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 52px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #1f78ff 0%, #0a62f0 100%);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: none;
+  cursor: pointer;
+  transition: none;
+  transform: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell .cta-primary:active, .cta-primary:active,
+.app-shell .primary-btn:active, .primary-btn:active,
+.app-shell .cta-button:active, .cta-button:active {
+  filter: brightness(0.94);
+  transform: none;
+}
+
+.app-shell .cta-primary:disabled, .cta-primary:disabled,
+.app-shell .primary-btn:disabled, .primary-btn:disabled,
+.app-shell .cta-button:disabled, .cta-button:disabled,
+.app-shell .cta-primary[disabled], .cta-primary[disabled] {
+  opacity: 0.5;
+  cursor: default;
+  filter: none;
+}
+
+.app-shell .cta-primary .icon-svg, .cta-primary .icon-svg,
+.app-shell .primary-btn .icon-svg, .primary-btn .icon-svg,
+.app-shell .cta-button .icon-svg, .cta-button .icon-svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+/* ── 2. Шапка (topbar) ────────────────────────────────────────────────────
+   Шапка уезжает при прокрутке (не sticky), фон прозрачный, логотип опущен
+   под системную панель Telegram. Своих плашек «Закрыть/⌄/•••» нет —
+   закрытие даёт Telegram, поэтому .topbar-pills и .top-actions скрыты. */
+.app-shell .topbar, .topbar {
+  position: static;
+  top: auto;
+  z-index: auto;
+  display: block;
+  width: 100%;
+  padding: 26px 0 6px;
+  background: transparent;
+  border: 0;
+  border-bottom: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  /* Нейтрализуем min-height из base.css: он добавлял высоту сверх отступа */
+  min-height: 0;
+}
+
+.app-shell .topbar-row, .topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 0;
+}
+
+.app-shell .topbar-side, .topbar-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.app-shell .topbar-side--right, .topbar-side--right { justify-content: flex-end; }
+.app-shell .topbar-center, .topbar-center { flex: 1; min-width: 0; }
+
+/* Логотип: высота задана, ширина по пропорции (соотношение 5.65:1) */
+.app-shell .brand-logo, .brand-logo {
+  height: 26px;
+  width: auto;
+  max-width: none;
+  display: block;
+  object-fit: contain;
+}
+
+/* Стрелка назад — без плашки, только иконка */
+.app-shell .topbar-back, .topbar-back {
+  width: 44px;
+  height: 44px;
+  margin-left: -8px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+.app-shell .topbar-back .icon-svg, .topbar-back .icon-svg { width: 22px; height: 22px; stroke-width: 2; }
+.app-shell .topbar-back:active, .topbar-back:active { opacity: 0.6; }
+
+/* Свои плашки шапки не нужны: закрытие — встроенное в Telegram */
+.app-shell .topbar-pills, .topbar-pills,
+.app-shell .top-actions, .top-actions { display: none; }
+
+/* Линия под шапкой при прокрутке не появляется — шапка уезжает */
+.app-shell .topbar.is-scrolled, .topbar.is-scrolled {
+  border-bottom: 0;
+  box-shadow: none;
+}
+
+/* ── 3. Карточка товара (product-card) ────────────────────────────────────
+   Одна плашка #141414 с верхним бликом, радиус 28. Внутри — фото в своей
+   плашке радиусом 20 и синяя пилюля цены. Обводки и кольца у карточки нет:
+   глубину дают фон и блик. Лента скидки декоративная — мышь не ловит. */
+.app-shell .product-card, .product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 0;
+  border-radius: 28px;
+  background: var(--card-primary, #141414);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 5px 30px rgba(0, 0, 0, 0.45);
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  position: relative;
+  isolation: auto;
+}
+.app-shell .product-card::before, .product-card::before,
+.app-shell .product-card::after, .product-card::after { display: none; }
+
+/* Фото — своя плашка, лента скидки обрезается её скруглением */
+.app-shell .product-figure, .product-figure {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #171a20;
+  isolation: auto;
+}
+.app-shell .product-figure img, .product-figure img,
+.app-shell .product-figure .media-image, .product-figure .media-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+/* Лента скидки: диагональная, декоративная */
+.app-shell .product-badge, .product-badge,
+.app-shell .product-badge--offer, .product-badge--offer {
+  position: absolute;
+  top: 16px;
+  right: -34px;
+  left: auto;
+  bottom: auto;
+  width: 128px;
+  padding: 4px 0;
+  transform: rotate(45deg);
+  border-radius: 0;
+  background: var(--success, #84ff39);
+  color: #06210a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.40);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Текст карточки */
+.app-shell .product-title, .product-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+}
+.app-shell .product-name, .product-name { min-height: 2.5em; }
+
+/* Цена — синяя пилюля по эталону, на всю ширину карточки */
+.app-shell .product-price, .product-price,
+.app-shell .product-body .product-price, .product-body .product-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #1f78ff 0%, #0a62f0 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+.app-shell .product-price:active, .product-price:active { filter: brightness(0.94); }
+
+/* Сердечко — видимое, ловит нажатие (в отличие от ленты) */
+.app-shell .product-figure .save-btn, .product-figure .save-btn,
+.app-shell .product-card .save-btn, .product-card .save-btn {
+  pointer-events: auto;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  border: 0;
+  color: #fff;
+  z-index: 3;
+}
+
+/* ── 4. Нижняя панель (tabbar) ────────────────────────────────────────────
+   Капсула с четырьмя разделами и отдельная круглая кнопка «+» справа.
+   Глубина — градиент, верхний блик и тень; обводки нет ни у одной плашки,
+   иначе две рамки в зазоре читались как линия между ними.
+   Панель поднята над контентом (z-index 1000) и не пропускает его сквозь
+   себя: фон сплошной, без размытия. */
+.app-shell .tabbar-wrap, .tabbar-wrap {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: calc(10px + env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 1000;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+}
+
+.app-shell .tabbar, .tabbar {
+  /* Капсула: 64 в высоту и шире — в референсе активная плашка занимает
+     примерно четверть её длины и вытянута по горизонтали. */
+  flex: 1 1 auto;
+  max-width: calc(100% - 74px);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 18px rgba(0, 0, 0, 0.45);
+  position: static;
+}
+
+.app-shell .tabbar-group, .tabbar-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex: 1;
+  gap: 0;
+
+}
+
+.app-shell .tabbar-item, .tabbar-item {
+  flex: 1;
+  min-width: 0;
+  /* Как в референсе: широкая таблетка 78×50 внутри капсулы 64 — отношение
+     около 1.6. Не круг: круглый вариант уже пробовали, он не подходит. */
+  height: 48px;
+  flex: 0 0 68px;
+  width: 68px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell .tabbar-item.is-active, .tabbar-item.is-active {
+  background: linear-gradient(180deg, #3a3a3e 0%, #2c2c30 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20);
+  color: #fff;
+}
+
+.app-shell .tabbar-item .icon-svg, .tabbar-item .icon-svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.7;
+}
+
+/* Кнопка «+» — отдельная плашка того же материала, что и капсула */
+.app-shell .tabbar-fab, .tabbar-fab {
+  flex: 0 0 auto;
+  width: 68px;
+  height: 68px;
+  border: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 18px rgba(0, 0, 0, 0.45);
+  color: #fff;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .tabbar-fab .icon-svg, .tabbar-fab .icon-svg { width: 26px; height: 26px; stroke-width: 2; }
+.app-shell .tabbar-fab:active, .tabbar-fab:active { filter: brightness(1.16); }
+
+/* Точка непрочитанных */
+.app-shell .tabbar-dot, .tabbar-dot {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-primary, #0a84ff);
+  box-shadow: none;
+  border: 0;
+}
+
+/* ── 5. Вторичные кнопки (ghost / dark / link / destructive) ──────────────
+   По эталону MemGift у кнопок четыре роли:
+     1) синяя таблетка  — главное действие (.cta-primary, .primary-btn)
+     2) тёмная таблетка — обычное действие (.ghost-btn, .dark-btn)
+     3) текстовая       — второстепенное (.link-btn)
+     4) разрушительная  — только текст, без плашки (.danger-text-btn)
+   Здесь роли 2–4. Ни одна не использует !important: файл подключается
+   последним, этого достаточно. */
+.app-shell .ghost-btn, .ghost-btn,
+.app-shell .btn-ghost, .btn-ghost,
+.app-shell .dark-btn, .dark-btn,
+.app-shell .btn-dark, .btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: none;
+  transform: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Плоский вариант «тёмной» — без градиента, только поверхность */
+.app-shell .dark-btn, .dark-btn,
+.app-shell .btn-dark, .btn-dark {
+  background: #242424;
+  box-shadow: none;
+}
+
+.app-shell .ghost-btn:active, .ghost-btn:active,
+.app-shell .btn-ghost:active, .btn-ghost:active,
+.app-shell .dark-btn:active, .dark-btn:active,
+.app-shell .btn-dark:active, .btn-dark:active {
+  filter: brightness(1.14);
+  transform: none;
+}
+
+.app-shell .ghost-btn:disabled, .ghost-btn:disabled,
+.app-shell .dark-btn:disabled, .dark-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  filter: none;
+}
+
+.app-shell .ghost-btn.wide, .ghost-btn.wide,
+.app-shell .dark-btn.wide, .dark-btn.wide { width: 100%; }
+
+/* Текстовая кнопка: без плашки, только текст */
+.app-shell .link-btn, .link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .link-btn:active, .link-btn:active { opacity: 0.6; }
+
+/* Разрушительная — только текст, цветом */
+.app-shell .danger-text-btn, .danger-text-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--danger, #ff5c5c);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .danger-text-btn:active, .danger-text-btn:active { opacity: 0.6; }
+
+/* Иконки внутри вторичных кнопок */
+.app-shell .ghost-btn .icon-svg, .ghost-btn .icon-svg,
+.app-shell .dark-btn .icon-svg, .dark-btn .icon-svg,
+.app-shell .link-btn .icon-svg, .link-btn .icon-svg,
+.app-shell .danger-text-btn .icon-svg, .danger-text-btn .icon-svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+/* ── 6. Поля ввода и поиск ────────────────────────────────────────────────
+   Поля — тёмная поверхность #181818 с внутренним бликом и радиусом 20.
+   Шрифт 16px обязателен: при меньшем Safari зумит страницу на фокусе.
+   Поиск — пилюля того же материала, что нижняя панель. */
+.app-shell .text-input, .text-input,
+.app-shell input[type="text"], input[type="text"],
+.app-shell input[type="number"], input[type="number"],
+.app-shell input[type="search"], input[type="search"],
+.app-shell input[type="tel"], input[type="tel"],
+.app-shell input[type="email"], input[type="email"],
+.app-shell input[type="password"], input[type="password"],
+.app-shell textarea, textarea,
+.app-shell select, select {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 20px;
+  background: #181818;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell textarea, textarea {
+  min-height: 96px;
+  padding: 14px 18px;
+  line-height: 1.45;
+  resize: none;
+}
+
+.app-shell .text-input::placeholder, .text-input::placeholder,
+.app-shell input::placeholder, input::placeholder,
+.app-shell textarea::placeholder, textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* Фокус: тонкая светлая рамка вместо системной */
+.app-shell .text-input:focus, .text-input:focus,
+.app-shell input:focus, input:focus,
+.app-shell textarea:focus, textarea:focus,
+.app-shell select:focus, select:focus {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.20);
+  outline: none;
+}
+
+/* Поиск — пилюля, работает и как поле, и как ссылка на экран поиска */
+.app-shell .ui-search, .ui-search,
+.app-shell .search-input, .search-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 52px;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  outline: none;
+}
+.app-shell .search-input .icon-svg, .search-input .icon-svg,
+.app-shell .ui-search .icon-svg, .ui-search .icon-svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── 7. Строка диалога (chat-row) ─────────────────────────────────────────
+   Одна плашка на диалог: фото объявления, имя, последнее сообщение и время.
+   Материал тот же, что у карточки — #141414 с верхним бликом, радиус 20. */
+.app-shell .chat-list, .chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+}
+
+.app-shell .chat-row, .chat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 72px;
+  padding: 12px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  color: inherit;
+  text-decoration: none;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell .chat-thumb, .chat-thumb {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #181818;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .chat-thumb img, .chat-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.app-shell .chat-meta, .chat-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.app-shell .chat-meta-top, .chat-meta-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.app-shell .chat-name, .chat-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-shell .chat-ad, .chat-ad,
+.app-shell .chat-sub, .chat-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-shell .chat-time, .chat-time {
+  margin-left: auto;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+  flex: none;
+}
+
+/* Счётчик непрочитанных */
+.app-shell .chat-unread, .chat-unread {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--accent-primary, #0a84ff);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+/* ── 8. Панели (glass-card и родственные поверхности) ─────────────────────
+   Один материал для всех блоков-панелей: поверхность #141414, верхний блик
+   и радиус 20. Обводок нет. Внутренние отступы не задаются — у каждой
+   панели они свои, иначе поедут сетки внутри (статистика, тарифы). */
+.app-shell .glass-card, .glass-card,
+.app-shell .summary-card, .summary-card,
+.app-shell .pay-status, .pay-status,
+.app-shell .admin-setting, .admin-setting,
+.app-shell .feed-reminder, .feed-reminder,
+.app-shell .tariff-term, .tariff-term,
+.app-shell .stats-row, .stats-row,
+.app-shell .stat-card, .stat-card,
+.app-shell .admin-kpi-cell, .admin-kpi-cell,
+.app-shell .admin-health-item, .admin-health-item {
+  background: var(--card-primary, #141414);
+  border: 0;
+  border-radius: 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+/* Псевдоэлементы-обводки у панелей не нужны: блик уже нарисован тенью */
+.app-shell .glass-card::before, .glass-card::before,
+.app-shell .glass-card::after, .glass-card::after,
+.app-shell .summary-card::after, .summary-card::after,
+.app-shell .pay-status::after, .pay-status::after,
+.app-shell .admin-setting::after, .admin-setting::after {
+  display: none;
+}
+
+/* Список-группа: одна плашка, строки внутри без своих поверхностей */
+.app-shell .list-stack, .list-stack {
+  background: var(--card-primary, #141414);
+  border-radius: 28px;
+  padding: 0 12px 0 28px;
+  overflow: hidden;
+  box-shadow: none;
+  border: 0;
+}
+.app-shell .list-stack > *, .list-stack > * { background: transparent; box-shadow: none; border: 0; }
+
+/* ── 9. Активное состояние переключателей (is-active) ─────────────────────
+   Единый рецепт: активный элемент светлее основы и с более ярким бликом.
+   Исключение — вкладки ленты «Находки / Барахолка»: по требованию владельца
+   они выглядят ОДИНАКОВО в любом состоянии, поэтому для них явно заданы
+   одни и те же значения. */
+.app-shell .chip.is-active, .chip.is-active,
+.app-shell .segmented button.is-active, .segmented button.is-active,
+.app-shell .chat-tab.is-active, .chat-tab.is-active,
+.app-shell .ui-tab.is-active, .ui-tab.is-active,
+.app-shell .admin-tab.is-active, .admin-tab.is-active,
+.app-shell .tariff-method.is-active, .tariff-method.is-active,
+.app-shell .tariff-term.is-active, .tariff-term.is-active {
+  background: linear-gradient(180deg, #3a3a3e 0%, #2c2c30 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20);
+  color: #fff;
+}
+
+/* Вкладки ленты: вид не зависит от состояния */
+.app-shell .feed-switch button, .feed-switch button,
+.app-shell .feed-switch button.is-active, .feed-switch button.is-active {
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  border: 0;
+  border-radius: 999px;
+  height: 52px;
+  padding: 0 24px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  transition: none;
+  transform: none;
+}
+
+/* Тот же вид у неактивных пилюль-переключателей */
+.app-shell .segmented button, .segmented button,
+.app-shell .chat-tab, .chat-tab,
+.app-shell .ui-tab, .ui-tab,
+.app-shell .admin-tab, .admin-tab,
+.app-shell .tariff-method, .tariff-method {
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 600;
+  transition: none;
+  transform: none;
+}
+
+/* ── 10. Чипы, бейджи и круглые кнопки ────────────────────────────────────
+   Мелкие элементы управления. Чип — пилюля того же материала, что панель.
+   Бейдж — компактная метка. Круглая кнопка — 40px, для иконок в строках. */
+.app-shell .chip, .chip,
+.app-shell .chat-chip, .chat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: none;
+  transform: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .chip:active, .chip:active,
+.app-shell .chat-chip:active, .chat-chip:active { filter: brightness(1.12); }
+
+/* Бейдж — метка на карточке или в строке */
+.app-shell .badge, .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  border: 0;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Круглая кнопка с иконкой */
+.app-shell .cta-round, .cta-round {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: #242424;
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .cta-round .icon-svg, .cta-round .icon-svg { width: 20px; height: 20px; }
+.app-shell .cta-round:active, .cta-round:active { filter: brightness(1.15); }
+
+/* ── 11. Строки меню и настроек ───────────────────────────────────────────
+   Два режима: самостоятельно (плашка с бликом) и внутри .list-stack
+   (прозрачная строка на общей плашке, разделённая линией #262626). */
+.app-shell .menu-row, .menu-row,
+.app-shell .setting-row, .setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Внутри группы: одна плашка на всех, строки разделены линией */
+.app-shell .list-stack > .menu-row, .list-stack > .menu-row,
+.app-shell .list-stack > .setting-row, .list-stack > .setting-row {
+  height: 74px;
+  min-height: 74px;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid #262626;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.app-shell .list-stack > :first-child, .list-stack > :first-child { border-top: 0; }
+
+.app-shell .menu-left, .menu-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Кружок-шеврон справа */
+.app-shell .menu-arrow, .menu-arrow,
+.app-shell .plan-arrow, .plan-arrow {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #262626;
+  color: #7d7d7d;
+  font-size: 18px;
+  line-height: 1;
+  border: 0;
+}
+.app-shell .menu-row:active .menu-arrow, .menu-row:active .menu-arrow { background: #303030; }
+
+/* Метод оплаты в тарифах — та же пилюля-переключатель */
+.app-shell .tariff-method, .tariff-method {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+}
+
+/* ── 12. Каркас страницы (screen) ─────────────────────────────────────────
+   Экран занимает всю ширину телефона: чёрных полос по бокам быть не должно.
+   Отступ 16px слева и справа, снизу — запас под плавающую панель, чтобы
+   контент не уходил под неё. На планшете и десктопе ширина ограничивается
+   по центру, там это уместно. */
+.app-shell .screen, .screen {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom));
+}
+
+.app-shell .screen.padded, .screen.padded {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 768px) {
+  .app-shell .screen, .screen { max-width: 720px; margin: 0 auto; }
+}
+@media (min-width: 1280px) {
+  .app-shell .screen, .screen { max-width: 1120px; }
+}
+
+/* ── 13. Строка поиска с фильтром и подсказки ─────────────────────────────
+   Заменяет сетку категорий в Барахолке: поле поиска и кнопка «Фильтр»
+   в одну строку. Подсказки (.hint-chip) — тот же чип, только помельче. */
+.app-shell .market-toolbar, .market-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+.app-shell .market-toolbar .search-input, .market-toolbar .search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.app-shell .filter-pill, .filter-pill {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .filter-pill:active, .filter-pill:active { filter: brightness(1.14); }
+.app-shell .market-toolbar .icon-svg, .market-toolbar .icon-svg { width: 20px; height: 20px; }
+
+.app-shell .hint-chip, .hint-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  box-shadow: none;
+  transition: none;
+  transform: none;
+}
+
+/* ── 15. ИИ-чат («Поиск словами») ─────────────────────────────────────────
+   Экран в духе Gemini: пока диалог пуст, по центру крупный заголовок,
+   под ним примеры-чипы, а поле ввода — светящаяся пилюля с мягким ореолом.
+   Когда начинается переписка, центрирование уходит и остаётся обычная лента. */
+.app-shell .chat-start, .chat-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  min-height: 44vh;
+  padding: 24px 0;
+}
+.app-shell .chat-hello, .chat-hello {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #fff;
+  max-width: 320px;
+}
+.app-shell .chat-hello-sub, .chat-hello-sub {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 300px;
+}
+.app-shell .chat-examples, .chat-examples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  max-width: 340px;
+}
+.app-shell .chat-example, .chat-example {
+  height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.78);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .chat-example:active, .chat-example:active { filter: brightness(1.14); }
+
+/* Поле ввода — пилюля с ореолом, кнопка отправки внутри */
+.app-shell .chat-input, .chat-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.app-shell .chat-input .text-input, .chat-input .text-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  height: 44px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+  font-size: 16px;
+}
+.app-shell .chat-input .text-input:focus, .chat-input .text-input:focus { box-shadow: none; }
+.app-shell .chat-send, .chat-send {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1f78ff 0%, #0a62f0 100%);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  -webkit-tap-highlight-color: transparent;
+}
+.app-shell .chat-send:active, .chat-send:active { filter: brightness(0.94); }
+.app-shell .chat-send:disabled, .chat-send:disabled { opacity: 0.5; }
+.app-shell .chat-send .icon-svg, .chat-send .icon-svg { width: 20px; height: 20px; }
+
+/* ── 16. Разгрузка экранов поиска ─────────────────────────────────────────
+   «Поиск словами» и «Вручную» были перегружены: два заголовка подряд,
+   пояснительные абзацы, подсказки под каждым полем. Оставляем суть —
+   название режима, поля, чипы. Текстовые пояснения убираем совсем,
+   подсказки делаем мелкой приглушённой строкой. */
+.app-shell .sub-copy, .sub-copy { display: none; }
+
+/* Заголовки экранов видны всегда: экран без названия читается как сбой.
+   Раньше здесь стоял display:none, и /hunt с /hunt/manual начинались с
+   безымянных вкладок. */
+.app-shell .hunt-screen > .page-title, .hunt-screen > .page-title,
+.app-shell .chat-wrap .chat-header-title, .chat-wrap .chat-header-title {
+  display: block;
+}
+
+/* Подписи полей — мелкие, капсом, с воздухом сверху */
+.app-shell .field-label-row, .field-label-row {
+  margin: 22px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+.app-shell .chip-row, .chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Подсказки — одна тихая строка вместо абзаца */
+.app-shell .hint-note, .hint-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.38);
+}
+.app-shell .collector-warn, .collector-warn {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 184, 77, 0.10);
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.app-shell .hint-chips, .hint-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* ── 17. Поле ввода уже ───────────────────────────────────────────────────
+   Плашка ввода растягивалась на всю ширину и выглядела тяжёлой. Делаем её
+   компактнее и по центру — как в Gemini: поле занимает примерно 92% ширины
+   на телефоне, но не больше 360px, и стоит по центру. */
+.app-shell .chat-input, .chat-input {
+  max-width: 360px;
+  margin: 0 auto;
+  width: 100%;
+}
+/* Строка поиска в Барахолке — тоже компактнее, фильтр остаётся справа */
+.app-shell .market-toolbar .search-input, .market-toolbar .search-input {
+  max-width: none;
+}
+
+/* ── 18. Статус заявки на оплату ──────────────────────────────────────────
+   Заявка CISPay проходит стадии: ожидание оплаты → проверка → оплачено
+   либо отклонено. Каждое состояние должно читаться: цвет текста и, где
+   нужно, индикатор ожидания и кнопка новой заявки. */
+.app-shell .pay-status, .pay-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.app-shell .pay-status > span:first-child, .pay-status > span:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Ожидание и проверка — нейтральный синеватый тон */
+.app-shell .pay-waiting, .pay-waiting,
+.app-shell .pay-review, .pay-review {
+  background: rgba(10, 132, 255, 0.12);
+  color: rgba(255, 255, 255, 0.82);
+}
+/* Успех — зелёный акцент */
+.app-shell .pay-paid, .pay-paid {
+  background: rgba(132, 255, 57, 0.12);
+  color: #b6ff86;
+}
+/* Отклонено и истекло — тёплый тревожный тон */
+.app-shell .pay-rejected, .pay-rejected,
+.app-shell .pay-expired, .pay-expired,
+.app-shell .pay-error, .pay-error {
+  background: rgba(255, 92, 92, 0.12);
+  color: #ff9a9a;
+}
+/* Тестовый счёт */
+.app-shell .pay-test, .pay-test {
+  background: rgba(255, 184, 77, 0.12);
+  color: #ffcf8a;
+}
+
+/* Индикатор ожидания: тонкое вращающееся кольцо */
+.app-shell .pay-spinner, .pay-spinner {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #0a84ff;
+  animation: pay-spin 900ms linear infinite;
+}
+@keyframes pay-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .pay-spinner, .pay-spinner { animation: none; border-top-color: #0a84ff; }
+}
+
+/* ── 19. Условия оплаты и реквизиты ───────────────────────────────────────
+   Обязательный блок для проверки мерчанта CISPay: что за услуга, как
+   списываются деньги, правила возврата, исполнитель, ИНН, ссылки на
+   документы. Оформлен тихо, чтобы не спорить с тарифами. */
+.app-shell .pay-legal, .pay-legal {
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.app-shell .pay-legal-title, .pay-legal-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  margin-bottom: 8px;
+}
+.app-shell .pay-legal-list, .pay-legal-list {
+  margin: 0;
+  padding: 0 0 0 16px;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.app-shell .pay-legal-list li, .pay-legal-list li {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.62);
+}
+.app-shell .pay-legal-requisites, .pay-legal-requisites {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
+.app-shell .pay-legal-links, .pay-legal-links {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+}
+.app-shell .pay-legal-links a, .pay-legal-links a {
+  color: #6fb4ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.app-shell .pay-legal-muted, .pay-legal-muted { color: rgba(255, 255, 255, 0.28); }
+
+/* Метка сборки в профиле: мелко и тихо, нужна только для проверки версии */
+.app-shell .build-mark, .build-mark {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.22);
+  letter-spacing: 0.02em;
+}
+
+/* ── 20. Место под встроенную панель Telegram ─────────────────────────────
+   У экранов со своей шапкой (ИИ-чат, диалог) не было отступа сверху — они
+   прилипали к системной панели «Закрыть / мини-приложение». У экранов с
+   общим TopBar отступ даёт сам TopBar (26px), поэтому здесь только то,
+   что живёт без него.
+
+   env(safe-area-inset-top) добавляем на случай полноэкранного режима, где
+   содержимое заходит под вырез и под кнопки клиента. */
+.app-shell .chat-wrap, .chat-wrap {
+  padding-top: calc(14px + env(safe-area-inset-top, 0px));
+}
+.app-shell .chat-header, .chat-header {
+  padding-top: 4px;
+}
+/* Ручной поиск использует Screen — даём ему тот же воздух сверху */
+.app-shell .screen.hunt-screen, .screen.hunt-screen {
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+}
+/* Экраны без TopBar (оплата, админка, новости, чаты) — небольшой отступ,
+   чтобы первый элемент не лип к панели */
+.app-shell .screen, .screen {
+  padding-top: calc(8px + env(safe-area-inset-top, 0px));
+}
+/* Вкладки ИИ-чата: ряд не должен упираться в шапку */
+.app-shell .chat-wrap > .chat-tabs, .chat-wrap > .chat-tabs {
+  margin-top: 6px;
+}
+
+/* Экран диалога (открытый чат): своя шапка, значит свой отступ сверху */
+.app-shell .chat-screen, .chat-screen {
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+}
+
+/* ── 21. Баннер-кнопка в поиск лотов ──────────────────────────────────────
+   Картинка владельца в размер карточек: фиксированная высота 148px, ширина
+   по экрану, края скруглены на 24. object-fit: cover заполняет блок без
+   искажений — лишнее ровно обрезается по центру. Вся площадь — ссылка. */
+.app-shell .hunt-banner, .hunt-banner {
+  display: block;
+  width: 100%;
+  height: 148px;
+  margin: 12px 0 0;
+  border-radius: 24px;
+  overflow: hidden;
+  line-height: 0;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  isolation: isolate;
+  transform: translateZ(0);
+}
+.app-shell .hunt-banner img, .hunt-banner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 24px;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+.app-shell .hunt-banner:active, .hunt-banner:active { filter: brightness(0.94); }
+/* На широких экранах высокий баннер не нужен */
+@media (min-width: 768px) {
+  .app-shell .hunt-banner, .hunt-banner { height: 190px; }
+}
+
+/* ── 22. Экран тарифов и оплаты ───────────────────────────────────────────
+   Структура из ТЗ (этап T) уже собрана: статус → сравнение → сроки →
+   способ оплаты → кнопка → статус → промокод. Здесь только внешний вид:
+   один ритм, читаемая иерархия, выбранный срок видно сразу. */
+.app-shell .page-narrow, .page-narrow {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px calc(96px + env(safe-area-inset-bottom));
+}
+
+/* 1. Плашка статуса */
+.app-shell .tariff-status, .tariff-status {
+  margin-top: 4px;
+  padding: 16px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.app-shell .tariff-status .plan-name, .tariff-status .plan-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+.app-shell .tariff-status .plan-desc, .tariff-status .plan-desc {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* 2. Сравнение «Бесплатно / Плюс» */
+.app-shell .tariff-compare, .tariff-compare {
+  margin-top: 12px;
+  padding: 6px 16px;
+  border-radius: 22px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.app-shell .tariff-row, .tariff-row {
+  display: grid;
+  grid-template-columns: 1fr 88px 88px;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.78);
+}
+.app-shell .tariff-row:first-child, .tariff-row:first-child {
+  border-top: 0;
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+.app-shell .tariff-row.tariff-head, .tariff-row.tariff-head {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+.app-shell .tariff-row > span:not(:first-child), .tariff-row > span:not(:first-child) {
+  text-align: center;
+  font-weight: 600;
+}
+/* Колонка «Плюс» — главное, поэтому ярче */
+.app-shell .tariff-row > span:last-child, .tariff-row > span:last-child { color: #fff; }
+/* «—» в колонках бесплатного — приглушённо */
+.app-shell .tariff-row > span:nth-child(2), .tariff-row > span:nth-child(2) {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* 3. Сроки: три плитки */
+.app-shell .tariff-terms, .tariff-terms {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.app-shell .tariff-term, .tariff-term {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 84px;
+  padding: 12px 8px;
+  border: 1.5px solid transparent;
+  border-radius: 18px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  transition: none;
+}
+.app-shell .tariff-term-days, .tariff-term-days {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+.app-shell .tariff-term-price, .tariff-term-price {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+}
+/* Выбранный срок */
+.app-shell .tariff-term.is-active, .tariff-term.is-active {
+  border-color: #1f78ff;
+  background: linear-gradient(180deg, rgba(31, 120, 255, 0.18), rgba(31, 120, 255, 0.06));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.app-shell .tariff-term .badge, .tariff-term .badge {
+  position: absolute;
+  top: -7px;
+  right: 8px;
+  height: 18px;
+  padding: 0 7px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--success, #84ff39);
+  color: #06210a;
+}
+
+/* 4. Способ оплаты */
+.app-shell .tariff-methods, .tariff-methods {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.app-shell .tariff-method, .tariff-method {
+  flex: 1;
+  justify-content: center;
+  font-size: 15px;
+}
+.app-shell .tariff-method:disabled, .tariff-method:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* 5. Главная кнопка */
+.app-shell .tariff-pay, .tariff-pay {
+  position: static;
+  width: 100%;
+  margin-top: 14px;
+  height: 54px;
+  font-size: 17px;
+  z-index: auto;
+}
+.app-shell .tariff-pay:disabled, .tariff-pay:disabled { opacity: 0.5; }
+
+/* ── 23. Чип подписки в профиле ───────────────────────────────────────────
+   Вместо «Плюс / Пробный / Бесплатно» голым текстом — чип с датой продления.
+   Платный тариф выделяется цветом, пробный остаётся нейтральным. */
+.app-shell .plan-chip, .plan-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.app-shell .plan-chip.is-plus, .plan-chip.is-plus {
+  background: rgba(132, 255, 57, 0.14);
+  color: #b6ff86;
+}
+
+/* ── 24. Админка ──────────────────────────────────────────────────────────
+   Функциональность по ТЗ уже собрана (вкладки, группы, степперы, поиск,
+   сохранение, метрики, история, предпросмотр). Здесь только внешний вид:
+   один ритм, крупные числа в метриках, статусы здоровья цветом, панель
+   сохранения не теряется. */
+.app-shell .admin-tabs, .admin-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  scrollbar-width: none;
+}
+.app-shell .admin-tabs::-webkit-scrollbar, .admin-tabs::-webkit-scrollbar { display: none; }
+.app-shell .admin-tabs button, .admin-tabs button {
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.65);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.app-shell .admin-tabs button.is-active, .admin-tabs button.is-active {
+  background: linear-gradient(180deg, #3a3a3e 0%, #2c2c30 100%);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Группы настроек */
+.app-shell .admin-group-title, .admin-group-title {
+  margin: 20px 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+.app-shell .admin-setting, .admin-setting {
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  margin-bottom: 8px;
+}
+.app-shell .admin-setting-head, .admin-setting-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.app-shell .admin-key, .admin-key {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+/* Изменённая настройка — видно сразу */
+.app-shell .admin-setting.is-changed, .admin-setting.is-changed {
+  background: rgba(31, 120, 255, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(31, 120, 255, 0.5);
+}
+
+/* Степпер «− значение +» */
+.app-shell .admin-stepper, .admin-stepper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+.app-shell .admin-stepper button, .admin-stepper button {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border: 0;
+  border-radius: 12px;
+  background: #242424;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+.app-shell .admin-stepper button:active, .admin-stepper button:active { filter: brightness(1.3); }
+.app-shell .admin-stepper input, .admin-stepper input {
+  flex: 1;
+  min-width: 0;
+  height: 38px;
+  text-align: center;
+  border: 0;
+  border-radius: 12px;
+  background: #181818;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Панель сохранения: прилипает внизу над навигацией */
+.app-shell .admin-save-bar, .admin-save-bar {
+  position: sticky;
+  bottom: calc(88px + env(safe-area-inset-bottom));
+  margin-top: 16px;
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  border-radius: 20px;
+  background: rgba(20, 20, 20, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.55);
+  z-index: 30;
+}
+
+/* Метрики */
+.app-shell .admin-kpi, .admin-kpi {
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+.app-shell .admin-kpi-value, .admin-kpi-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+.app-shell .admin-kpi-label, .admin-kpi-label {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Статусы здоровья: точка + текст */
+.app-shell .admin-health-item, .admin-health-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: var(--card-primary, #141414);
+  font-size: 14px;
+}
+.app-shell .admin-health-item::before, .admin-health-item::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: #84ff39;
+}
+.app-shell .admin-health-item.is-warn::before, .admin-health-item.is-warn::before { background: #ffb84d; }
+.app-shell .admin-health-item.is-bad::before, .admin-health-item.is-bad::before { background: #ff5c5c; }
+
+/* Плашка уведомления о сохранении */
+.app-shell .admin-toast, .admin-toast {
+  position: sticky;
+  top: 8px;
+  z-index: 20;
+  margin: 4px 0 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(132, 255, 57, 0.14);
+  color: #b6ff86;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ── 25. Поиск с фильтрами ────────────────────────────────────────────────
+   Экран держался на старом CSS: заголовок, строка поиска, рейлы фильтров и
+   счётчик выглядели из другого набора. Приводим к общему языку: пилюли,
+   один ритм, горизонтальные рейлы с прокруткой. */
+.app-shell .page-title, .page-title {
+  margin: 4px 0 12px;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+/* Строка поиска: поле и кнопка поиска по фото в один ряд */
+.app-shell .search-row, .search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.app-shell .search-row .text-input, .search-row .text-input {
+  flex: 1;
+  min-width: 0;
+  height: 52px;
+  min-height: 52px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  border: 0;
+  padding: 0 18px;
+  font-size: 16px;
+}
+.app-shell .photo-search-btn, .photo-search-btn {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+}
+.app-shell .photo-search-btn .icon-svg, .photo-search-btn .icon-svg { width: 22px; height: 22px; }
+.app-shell .photo-search-btn:active, .photo-search-btn:active { filter: brightness(1.16); }
+
+/* Рейл фильтров: горизонтальная прокрутка без полосы */
+.app-shell .chip-rail, .chip-rail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0 6px;
+  scrollbar-width: none;
+}
+.app-shell .chip-rail::-webkit-scrollbar, .chip-rail::-webkit-scrollbar { display: none; }
+.app-shell .chip-rail > *, .chip-rail > * { flex: 0 0 auto; }
+.app-shell .chip-rail-label, .chip-rail-label {
+  margin: 14px 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Применённые фильтры и счётчик */
+.app-shell .active-filters, .active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 12px;
+}
+.app-shell .count-chip-n, .count-chip-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ── 26. Страница лота ────────────────────────────────────────────────────
+   Самый посещаемый экран после ленты и единственное место, где человек
+   решает покупать. Оформление точечное: фото, цена, продавец, описание,
+   нижняя панель. Раскладку не трогаем — только поверхности и типографика. */
+.app-shell .detail-hero, .detail-hero,
+.app-shell .detail-gallery, .detail-gallery {
+  border-radius: 24px;
+  overflow: hidden;
+  background: #171a20;
+}
+.app-shell .detail-slide, .detail-slide { border-radius: 24px; overflow: hidden; }
+.app-shell .detail-dots, .detail-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 8px;
+}
+.app-shell .detail-counter, .detail-counter {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+  margin-top: 6px;
+}
+.app-shell .detail-head, .detail-head {
+  margin: 14px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.app-shell .detail-price-block, .detail-price-block { margin: 10px 0 0; }
+.app-shell .detail-price, .detail-price {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.app-shell .detail-price-label, .detail-price-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.app-shell .detail-desc, .detail-desc,
+.app-shell .listing-desc, .listing-desc {
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+.app-shell .listing-desc-toggle, .listing-desc-toggle {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6fb4ff;
+  cursor: pointer;
+}
+.app-shell .spec-row, .spec-row {
+  display: flex;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 14px;
+}
+.app-shell .spec-row:first-child, .spec-row:first-child { border-top: 0; }
+.app-shell .detail-bar, .detail-bar {
+  background: #141414;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+}
+.app-shell .copy-block, .copy-block {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #181818;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  word-break: break-all;
+}
+.app-shell .feed-queued-line, .feed-queued-line,
+.app-shell .feed-desc-unknown, .feed-desc-unknown {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── 27. Диалог (переписка) ───────────────────────────────────────────────
+   Пузыри, время, вложения и поле ввода. Входящие — поверхность, исходящие —
+   акцент. Медиа и аудио скруглены, вложения открываются как обычно. */
+.app-shell .chat-messages, .chat-messages { display: flex; flex-direction: column; gap: 8px; }
+.app-shell .bubble, .bubble {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  background: #1c1c1e;
+  color: #fff;
+  font-size: 15px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+.app-shell .bubble-a, .bubble-a {
+  align-self: flex-end;
+  background: linear-gradient(180deg, #1f78ff 0%, #0a62f0 100%);
+  border-bottom-right-radius: 6px;
+}
+.app-shell .bubble:not(.bubble-a), .bubble:not(.bubble-a) { border-bottom-left-radius: 6px; }
+.app-shell .bubble-time, .bubble-time {
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: right;
+}
+.app-shell .bubble-media-img, .bubble-media-img {
+  display: block;
+  max-width: 100%;
+  border-radius: 14px;
+}
+.app-shell .bubble-audio, .bubble-audio { width: 100%; max-width: 240px; }
+.app-shell .bubble-menu, .bubble-menu {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+.app-shell .chat-day, .chat-day {
+  align-self: center;
+  margin: 6px 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #1c1c1e;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.app-shell .chat-input-wrap, .chat-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+.app-shell .chat-field, .chat-field {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  padding: 0 8px;
+  outline: none;
+}
+.app-shell .attach-btn, .attach-btn,
+.app-shell .send-btn, .send-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #242424;
+  color: #fff;
+  cursor: pointer;
+}
+.app-shell .send-btn, .send-btn {
+  background: linear-gradient(180deg, #1f78ff 0%, #0a62f0 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+.app-shell .send-btn:disabled, .send-btn:disabled { opacity: 0.45; }
+.app-shell .chat-top, .chat-top { background: transparent; }
+.app-shell .chat-header-left, .chat-header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+/* ── 28. Мои объявления и Избранное ───────────────────────────────────────
+   Те же плашки, что у карточек: #141414, радиус 18, превью 56. */
+.app-shell .myad-card, .myad-card,
+.app-shell .favorite-row, .favorite-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  color: inherit;
+}
+.app-shell .result-thumb, .result-thumb,
+.app-shell .myad-thumb, .myad-thumb {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #181818;
+  object-fit: cover;
+}
+.app-shell .myad-body, .myad-body { flex: 1; min-width: 0; }
+.app-shell .row-title, .row-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-shell .myad-price, .myad-price,
+.app-shell .result-price, .result-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #6fb4ff;
+}
+.app-shell .product-city, .product-city {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.app-shell .favorite-remove, .favorite-remove {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+.app-shell .tool-row, .tool-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.app-shell .tool-btn, .tool-btn {
+  height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.78);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.app-shell .tab-row, .tab-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.app-shell .tab-row::-webkit-scrollbar { display: none; }
+
+/* ── 29. Критерии, новости, онбординг ─────────────────────────────────────
+   Остатки старых экранов: карточка критерия, блок новостей, служебные
+   отступы. Приводим к общему ритму. */
+.app-shell .chat-crit-card, .chat-crit-card {
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.app-shell .chat-crit-title, .chat-crit-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+.app-shell .chat-crit-sub, .chat-crit-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.app-shell .chat-crit-x, .chat-crit-x {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 18px;
+  cursor: pointer;
+}
+.app-shell .chat-note, .chat-note,
+.app-shell .muted-line, .muted-line {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.45);
+}
+.app-shell .error, .error { color: #ff9a9a; font-size: 13px; }
+.app-shell .lastnews, .lastnews {
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--card-primary, #141414);
+}
+.app-shell .lastnews-thumb, .lastnews-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  object-fit: cover;
+}
+.app-shell .lastnews-copy, .lastnews-copy { flex: 1; min-width: 0; font-size: 13px; color: rgba(255, 255, 255, 0.6); }
+.app-shell .lastnews-arrow, .lastnews-arrow { color: rgba(255, 255, 255, 0.4); }
+.app-shell .onboarding, .onboarding { color: #fff; }
+.app-shell .onboarding .big, .onboarding .big {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+.app-shell .onboarding .dots, .onboarding .dots { display: flex; gap: 6px; justify-content: center; }
+.app-shell .onboarding .blob, .onboarding .blob { border-radius: 32px; overflow: hidden; }
+
+/* Служебные отступы — одна шкала вместо случайных значений */
+.app-shell .mt-8, .mt-8 { margin-top: 8px; }
+.app-shell .mt-12, .mt-12 { margin-top: 12px; }
+.app-shell .mt-14, .mt-14 { margin-top: 14px; }
+
+/* ── 30. Раскладка и остатки ──────────────────────────────────────────────
+   Классы, которые держат сетки и мелкие блоки. Меняем только то, что не
+   ломает раскладку: числа колонок, отступы, радиусы, цвета. Никаких
+   переносов и перестановок — экран должен остаться там же, где был. */
+.app-shell .grid-two, .grid-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.app-shell .feed-grid, .feed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.app-shell .form-stack, .form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.app-shell .field-wrap, .field-wrap { margin-top: 4px; }
+.app-shell .field-hint, .field-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.app-shell .field-error, .field-error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #ff9a9a;
+}
+.app-shell .is-ok, .is-ok { color: #b6ff86; }
+
+/* Категории в поиске — плитки */
+.app-shell .category-grid, .category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.app-shell .cat-tile, .cat-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 84px;
+  padding: 10px 6px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+}
+.app-shell .cat-tile.is-active, .cat-tile.is-active {
+  background: rgba(31, 120, 255, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(31, 120, 255, 0.55);
+  color: #fff;
+}
+.app-shell .cat-tile-art, .cat-tile-art { display: flex; align-items: center; justify-content: center; }
+.app-shell .cat-tile-label, .cat-tile-label {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* Баннеры ленты */
+.app-shell .feed-banner, .feed-banner {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.app-shell .feed-banner-slide, .feed-banner-slide { border-radius: 20px; overflow: hidden; }
+.app-shell .feed-banner-slide img, .feed-banner-slide img { object-fit: cover; }
+
+/* Статус ленты и напоминание */
+.app-shell .feed-status-row, .feed-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.app-shell .feed-status-chip, .feed-status-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+}
+.app-shell .feed-reminder-head, .feed-reminder-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Переключатели hunt и второй ряд вкладок */
+.app-shell .hunt-toggles, .hunt-toggles { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.app-shell .chat-tabs.is-second, .chat-tabs.is-second { margin-top: 0; }
+.app-shell .chat-tabs-pill, .chat-tabs-pill { display: none; }
+.app-shell .chat-replies, .chat-replies { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 0; }
+
+/* Мелочи форм и лота */
+.app-shell .ad-form, .ad-form { padding: 0; }
+.app-shell .price-pair, .price-pair {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.app-shell .avatar, .avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  background: #242424;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .padded-inline, .padded-inline { padding-left: 16px; padding-right: 16px; }
+.app-shell .chat-media-busy, .chat-media-busy { opacity: 0.6; }
+
+/* Подвал приложения */
+.app-shell .app-footer, .app-footer {
+  margin-top: 24px;
+  padding: 16px 0 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
+}
+.app-shell .app-footer-copy, .app-footer-copy {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+}
+.app-shell .app-footer-links, .app-footer-links {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+}
+.app-shell .app-footer-links a, .app-footer-links a {
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.app-shell .app-footer-sep, .app-footer-sep { color: rgba(255, 255, 255, 0.2); }
+
+/* ── 31. Последние остатки ────────────────────────────────────────────────
+   Точечные классы, которые ещё не были оформлены: заголовок и теги лота,
+   фильтры поиска, блоки успеха и состояния, шапки списков. */
+.app-shell .listing-title, .listing-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+}
+.app-shell .listing-tags, .listing-tags,
+.app-shell .feed-banner-dots, .feed-banner-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.app-shell .feed-banner-dots, .feed-banner-dots {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+}
+.app-shell .feed-banner-dots i, .feed-banner-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+}
+.app-shell .feed-banner-dots i.is-on, .feed-banner-dots i.is-on { background: #fff; }
+.app-shell .feed-banner-track, .feed-banner-track { display: flex; }
+
+/* Фильтры поиска */
+.app-shell .filter-chip, .filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.app-shell .filter-chip.is-on, .filter-chip.is-on {
+  background: rgba(31, 120, 255, 0.18);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(31, 120, 255, 0.5);
+}
+.app-shell .filter-chip-label, .filter-chip-label { font-size: 13px; }
+
+/* Блоки успеха и состояния */
+.app-shell .success-box, .success-box {
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(132, 255, 57, 0.10);
+  color: #b6ff86;
+  font-size: 14px;
+}
+.app-shell .success-actions, .success-actions { display: flex; gap: 8px; margin-top: 12px; }
+.app-shell .status-line, .status-line { font-size: 13px; color: rgba(255, 255, 255, 0.45); }
+.app-shell .board-note, .board-note {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.45);
+}
+.app-shell .back-to-top, .back-to-top {
+  position: fixed;
+  right: 16px;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: #242424;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* Списки: шапки и метаданные */
+.app-shell .chat-last, .chat-last {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-shell .chat-meta-bottom, .chat-meta-bottom { display: flex; align-items: center; gap: 8px; }
+.app-shell .chat-bubble, .chat-bubble {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--card-primary, #141414);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.app-shell .chat-back, .chat-back {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Профиль: аватар и группы */
+.app-shell .profile-avatar-img, .profile-avatar-img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+.app-shell .profile-avatar-fallback, .profile-avatar-fallback {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .menu-list, .menu-list { margin-top: 14px; }
+
+/* Тарифы и админка: мелкие строки */
+.app-shell .plan-left, .plan-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.app-shell .plan-balance, .plan-balance {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+.app-shell .admin-actions, .admin-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.app-shell .admin-diff, .admin-diff { font-size: 12px; color: #6fb4ff; }
+.app-shell .admin-health-dot, .admin-health-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #84ff39;
+}
+.app-shell .admin-health-dot.is-warn, .admin-health-dot.is-warn { background: #ffb84d; }
+.app-shell .admin-health-dot.is-bad, .admin-health-dot.is-bad { background: #ff5c5c; }
+.app-shell .feed-screen, .feed-screen { padding-top: 0; }
+.app-shell .compact, .compact { min-height: 44px; }
+
+/* ── 32. Последние штрихи ─────────────────────────────────────────────────
+   Заголовки секций, скелетоны, панель фильтров и строки истории. */
+.app-shell .section-head, .section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+.app-shell .section-head strong, .section-head strong {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+.app-shell .section-head span, .section-head span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.app-shell .feed-skeleton, .feed-skeleton {
+  border-radius: 20px;
+  background: linear-gradient(180deg, #1a1a1c 0%, #151517 100%);
+}
+.app-shell .filters-panel, .filters-panel {
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--card-primary, #141414);
+}
+.app-shell .listing-page, .listing-page { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+.app-shell .favorites-page, .favorites-page { padding-top: 4px; }
+.app-shell .profile-id, .profile-id {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.app-shell .profile-top, .profile-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0 4px;
+}
+.app-shell .admin-history-line, .admin-history-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+.app-shell .admin-plan-line, .admin-plan-line { font-size: 13px; color: rgba(255, 255, 255, 0.65); }
+.app-shell .lastnews-avatars, .lastnews-avatars { display: flex; }
+.app-shell .lastnews-avatars > *, .lastnews-avatars > * {
+  margin-left: -6px;
+  border-radius: 50%;
+  border: 2px solid #141414;
+}
+.app-shell .recommend-card, .recommend-card {
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.app-shell .plan-row, .plan-row { min-height: 56px; }
+.app-shell .mt-10, .mt-10 { margin-top: 10px; }
+
+/* ── 33. Гибрид: структура из ТЗ, вид Memgift ─────────────────────────────
+   Берём из спецификации v2 то, что не спорит с внешним видом: пропорции
+   фото, шкалу типографики, ограничение названия двумя строками, запрет
+   переносов в статистике. Радиусы, градиенты и капсулу оставляем своими. */
+
+/* Фото карточки — 4:3 по ТЗ вместо квадрата */
+.app-shell .product-figure, .product-figure { aspect-ratio: 4 / 3; }
+.app-shell .product-figure img, .product-figure .media-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Цена 700 16 px, название 2 строки, мета 11 px — как в ТЗ */
+.app-shell .product-price, .product-price { font-size: 16px; font-weight: 700; }
+.app-shell .product-name, .product-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  min-height: 2.6em;
+}
+.app-shell .product-meta, .product-meta {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Статистика профиля: подписи не переносятся */
+.app-shell .stats-label, .stats-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.app-shell .stats-value, .stats-value { font-size: 22px; font-weight: 700; }
+
+/* Заголовки экранов — 700, 20–24 px */
+.app-shell .page-title, .page-title { font-weight: 700; }
+
+/* Иерархия текста: главное — белое, второстепенное — 55 %, третье — 35 % */
+.app-shell .plan-desc, .plan-desc { color: rgba(255, 255, 255, 0.55); }
+.app-shell .hint-note, .hint-note { color: rgba(255, 255, 255, 0.38); }
+
+/* ── 34. Пузыри чата по ТЗ ────────────────────────────────────────────────
+   Спецификация v2 требует радиус 12: при 18 переписка выглядит «мягкой»
+   и на длинных сообщениях теряется строй. */
+.app-shell .bubble, .bubble { border-radius: 12px; }
+.app-shell .bubble-a, .bubble-a { border-bottom-right-radius: 4px; }
+.app-shell .bubble:not(.bubble-a), .bubble:not(.bubble-a) { border-bottom-left-radius: 4px; }
+
+/* ── 35. Тарифы по макету 35_ ─────────────────────────────────────────────
+   Переключатель срока, карточка «Плюса» с составом и недельный вход.
+   Вид — Memgift: пилюли, градиент на активном, бейдж «Чаще берут». */
+.app-shell .tg2, .tg2 {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  margin: 12px 0;
+  border-radius: 999px;
+  background: #1a1a1c;
+}
+.app-shell .tg2 button, .tg2 button {
+  flex: 1;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.app-shell .tg2 button.on, .tg2 button.on {
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+.app-shell .tg2 button em, .tg2 button em {
+  font-style: normal;
+  color: #b6ff86;
+  font-weight: 700;
+}
+
+.app-shell .plan-card, .plan-card {
+  position: relative;
+  padding: 16px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 18px rgba(0, 0, 0, 0.4);
+}
+.app-shell .plan-badge, .plan-badge {
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  height: 20px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--success, #84ff39);
+  color: #06210a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+}
+.app-shell .plan-top, .plan-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.app-shell .plan-top b, .plan-top b { font-size: 20px; font-weight: 700; color: #fff; }
+.app-shell .plan-top span, .plan-top span { font-size: 22px; font-weight: 700; color: #fff; }
+.app-shell .plan-top small, .plan-top small {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+.app-shell .plan-ft, .plan-ft {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 14px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.75);
+}
+.app-shell .plan-ft i, .plan-ft i {
+  font-style: normal;
+  color: #b6ff86;
+  font-weight: 700;
+  flex: none;
+}
+
+.app-shell .week-row, .week-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--card-primary, #141414);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.app-shell .week-info, .week-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.app-shell .week-info b, .week-info b { font-size: 15px; font-weight: 600; color: #fff; }
+.app-shell .week-info span, .week-info span { font-size: 12px; color: rgba(255, 255, 255, 0.45); }
+.app-shell .week-btn, .week-btn {
+  flex: none;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #242424;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.app-shell .week-btn:active, .week-btn:active { filter: brightness(1.2); }
+
+/* Строка «Подобрать свой тариф» — по рекомендации 35_ отложена,
+   поэтому выглядит как намёк, а не как рабочая ссылка. */
+.app-shell .calc-row, .calc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+}
+.app-shell .calc-soon, .calc-soon {
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #242424;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ── 36. Порядок блоков на экране тарифов ─────────────────────────────────
+   По макету: сравнение → срок → карточка плана → неделя → кнопка.
+   Кнопка в потоке, ничего не перекрывает. */
+.app-shell .tariff-compare, .tariff-compare { margin-bottom: 4px; }
+.app-shell .plan-card, .plan-card { margin-bottom: 0; }
+.app-shell .week-row, .week-row { margin-bottom: 0; }
+.app-shell .tariff-pay, .tariff-pay { position: static; margin-top: 16px; }
+
+/* ── 37. Каркас: единые заголовки, вкладки, отступы под док ────────────────
+   Слой вводит систему, а не косметику: одинаковые размеры заголовков,
+   один вид вкладок на всех экранах, гарантированный воздух над доком. */
+
+/* Заголовок экрана: 24/30, без серых полос и рамок вокруг шапки */
+.app-shell .page-title, .page-title {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary, #fff);
+  margin: 4px 0 16px;
+}
+
+/* Метка секции: 12 uppercase, приглушённая */
+.app-shell .section-label, .section-label,
+.app-shell .field-label-row, .field-label-row {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+}
+
+/* Вкладки: один механизм. Раньше на /hunt это были огромные кнопки во всю
+   ширину, на /hunt/manual — голый текст. Приводим к сегменту 44. */
+.app-shell .chat-tabs, .chat-tabs {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  height: 44px;
+  margin: 12px 0 16px;
+  border-radius: 999px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .chat-tabs-pill, .chat-tabs-pill {
+  display: none;
+}
+.app-shell .chat-tabs .chat-tab, .chat-tabs .chat-tab {
+  flex: 1;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, .60);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.app-shell .chat-tabs .chat-tab.is-active, .chat-tabs .chat-tab.is-active {
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16);
+  color: #fff;
+}
+
+/* Описание лота — обычным шрифтом. copy-block нужен для кодов и адресов,
+   а не для текста объявления. */
+.app-shell .copy-block, .copy-block {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, .72);
+}
+.app-shell .copy-block p, .copy-block p {
+  margin: 0 0 10px;
+  font: inherit;
+}
+
+/* Избранное и «мои объявления»: строка 96, фото 72, цена не первой строкой */
+.app-shell .favorite-row, .favorite-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 96px;
+  padding: 12px 0;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.app-shell .favorite-row .result-thumb, .favorite-row .result-thumb {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.app-shell .favorite-row .result-title, .favorite-row .result-title {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.app-shell .result-price, .result-price {
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Список диалогов: строка 76, без раздувания */
+/* Строка списка диалогов: минимальная высота 76 и разделитель вместо
+   отдельной карточки на каждую. Пузыри переписки тоже .chat-row, поэтому
+   стилизуем только строки с glass-card. */
+.app-shell .chat-row.glass-card, .chat-row.glass-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 12px 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+/* Поле ввода в переписке: не уезжает под системную полосу */
+.app-shell .chat-input-wrap, .chat-input-wrap {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0) 0%, #050505 40%);
+}
+.app-shell .chat-list, .chat-list {
+  padding-bottom: calc(var(--dock-space, 96px) + 12px);
+}
+
+/* Рельсы чипов: не обрезаются по буквам, справа мягкое затухание */
+.app-shell .chip-rail, .chip-rail {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 24px 0 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.app-shell .chip-rail::-webkit-scrollbar, .chip-rail::-webkit-scrollbar { display: none; }
+
+/* Шапки без серых плашек и рамок на всех экранах */
+/* Футер выше дока, без наложения на контент */
+.app-shell .app-footer, .app-footer {
+  padding-bottom: calc(var(--dock-space, 96px) + 16px);
+}
+
+/* ── 38. Тарифы: убрать кислоту, привести к палитре ─────────────────────── */
+
+/* Бейдж «Выгодно» / «Чаще берут» — синий tint, не кислотный */
+.app-shell .plan-badge, .plan-badge {
+  background: rgba(10, 132, 255, .18);
+  color: #6fb6ff;
+  box-shadow: inset 0 0 0 1px rgba(10, 132, 255, .35);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* Галочки преимуществ — белые приглушённые, а не зелёные */
+.app-shell .plan-ft i, .plan-ft i {
+  color: rgba(255, 255, 255, .55);
+}
+
+/* Процент скидки на сроке — графит с синим текстом, не зелёный */
+.app-shell .tg2 button em, .tg2 button em {
+  color: #6fb6ff;
+  font-weight: 600;
+}
+
+/* Текстовая ссылка калькулятора вместо неактивной строки с бейджем */
+.app-shell .calc-link, .calc-link {
+  display: block;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, .45);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.app-shell .calc-row, .calc-row {
+  margin-top: 10px;
+  padding: 8px 0;
+  background: transparent;
+  color: rgba(255, 255, 255, .45);
+  font-size: 13px;
+}
+
+/* Юридический блок: обычный текст, ссылки акцентные, но не дефолтно-синие */
+.app-shell .pay-legal a, .pay-legal a,
+.app-shell .legal-links a, .legal-links a {
+  color: #6fb6ff;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* Статус оплаты: спокойные цвета состояний вместо кислотного фона */
+.app-shell .pay-state, .pay-state {
+  border-radius: 20px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+/* ── 39. Профиль: шапка без сырых значений ──────────────────────────────── */
+.app-shell .profile-top, .profile-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0 20px;
+}
+.app-shell .profile-avatar-img, .profile-avatar-img,
+.app-shell .profile-avatar-fallback, .profile-avatar-fallback {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  font-size: 24px;
+  font-weight: 700;
+}
+.app-shell .profile-id, .profile-id {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .profile-sub, .profile-sub {
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .45);
+}
+
+/* ── 40. Нижний лист ──────────────────────────────────────────────────────
+   Одна панель на все выборы: город, условия, шаблоны, фильтры. */
+.app-shell .sheet-root, .sheet-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.app-shell .sheet-dim, .sheet-dim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, .55);
+  cursor: pointer;
+}
+.app-shell .sheet-panel, .sheet-panel {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 88dvh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 28px 28px 0 0;
+  background: #050505;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .10), 0 -8px 40px rgba(0, 0, 0, .6);
+  animation: sheet-in 180ms ease-out;
+}
+@keyframes sheet-in {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel { animation: none; }
+}
+.app-shell .sheet-grab, .sheet-grab {
+  width: 36px;
+  height: 4px;
+  margin: 8px auto 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .18);
+  flex: none;
+}
+.app-shell .sheet-title, .sheet-title {
+  padding: 12px 16px 8px;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #fff;
+  flex: none;
+}
+.app-shell .sheet-body, .sheet-body {
+  padding: 0 16px 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.app-shell .sheet-footer, .sheet-footer {
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, .06);
+  background: #050505;
+  flex: none;
+}
+
+/* Строка выбора внутри листа: 52, радио-точка справа */
+.app-shell .option-row, .option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.app-shell .option-row.is-active, .option-row.is-active { color: #6fb6ff; }
+.app-shell .option-dot, .option-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, .25);
+  flex: none;
+}
+.app-shell .option-row.is-active .option-dot, .option-row.is-active .option-dot {
+  border-color: #0A84FF;
+  background: radial-gradient(circle, #0A84FF 0 45%, transparent 46%);
+}
+
+/* ── 41. Сравнение «Бесплатно / Плюс» на тарифах ─────────────────────────── */
+.app-shell .tariff-compare-line, .tariff-compare-line {
+  margin: 0 0 16px;
+  padding: 12px 0 4px;
+}
+.app-shell .tcl-head, .tcl-head,
+.app-shell .tcl-row, .tcl-row {
+  display: grid;
+  grid-template-columns: 1fr 76px 62px;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.app-shell .tcl-head, .tcl-head {
+  color: rgba(255, 255, 255, .45);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+.app-shell .tcl-row, .tcl-row {
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.app-shell .tcl-head span:not(:first-child), .tcl-head span:not(:first-child),
+.app-shell .tcl-row span:not(:first-child), .tcl-row span:not(:first-child) {
+  text-align: right;
+}
+
+/* ── 42. Действия в листе и встроенные селекты ───────────────────────────── */
+.app-shell .sheet-actions, .sheet-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.app-shell .sheet-actions > * , .sheet-actions > * { flex: 1; }
+
+/* Нативные select приводим к виду пилюль: дефолтный браузерный вид на
+   тёмной теме выглядит светлой заплаткой. */
+.app-shell select.text-input, select.text-input,
+.app-shell select, .app-shell .filters-panel select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,.5)' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  color: #fff;
+  font-size: 16px;
+}
+.app-shell select option, select option {
+  background: #141414;
+  color: #fff;
+}
+
+/* ── 43. Панель результатов поиска ───────────────────────────────────────── */
+.app-shell .result-bar, .result-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 4px 0 12px;
+}
+.app-shell .result-count, .result-count {
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .sort-chip, .sort-chip {
+  height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .75);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── 44. Сетка категорий и создание объявления ───────────────────────────── */
+.app-shell .category-grid, .category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+@media (min-width: 768px) {
+  .category-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.app-shell .cat-tile, .cat-tile {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  aspect-ratio: 4 / 3;
+  min-height: 0;
+  padding: 12px;
+  border: 0;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #1c1c1f 0%, #141414 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .10);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+}
+.app-shell .cat-tile.is-selected, .cat-tile.is-selected {
+  box-shadow: inset 0 0 0 1px #0A84FF, inset 0 1px 0 rgba(255, 255, 255, .10);
+}
+.app-shell .cat-tile-label, .cat-tile-label {
+  position: relative;
+  z-index: 1;
+  font-size: 13px;
+  line-height: 17px;
+  font-weight: 600;
+  color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.app-shell .cat-tile-art, .cat-tile-art {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 58%;
+  height: 58%;
+  opacity: .9;
+  pointer-events: none;
+}
+.app-shell .cat-tile-art img, .cat-tile-art img,
+.app-shell .cat-tile-art svg, .cat-tile-art svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Кнопка создания: sticky над доком, не в конце простыни */
+.app-shell .create-actions, .create-actions {
+  position: sticky;
+  bottom: calc(var(--dock-space, 96px) + 8px);
+  padding: 12px 0 8px;
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0) 0%, #050505 45%);
+}
+
+/* Шаг создания: строка и полоса 4 px */
+.app-shell .create-progress, .create-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .create-bar, .create-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .10);
+  overflow: hidden;
+}
+.app-shell .create-bar > span, .create-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #0A84FF;
+  transition: width 180ms ease-out;
+}
+/* Кнопки шага держим над доком */
+.app-shell .step-actions, .step-actions {
+  position: sticky;
+  bottom: calc(var(--dock-space, 96px) + 8px);
+  display: flex;
+  gap: 8px;
+  padding: 12px 0 8px;
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0) 0%, #050505 45%);
+}
+.app-shell .step-actions > * , .step-actions > * { flex: 1; }
+
+/* ── 45. Правки по реальным снимкам экранов ─────────────────────────────── */
+
+/* /hunt: у .chat-wrap не было боковых отступов — заголовок «Поиск лотов»
+   обрезался слева, а вкладки уходили за правый край экрана. */
+.app-shell .chat-wrap, .chat-wrap {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+/* Панель ввода при этом тянется до краёв: это фон, а не контент */
+.app-shell .chat-wrap .chat-input-wrap, .chat-wrap .chat-input-wrap {
+  margin-left: -16px;
+  margin-right: -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+/* Вкладки — ровно по ширине контента, без выхода за край */
+.app-shell .chat-wrap > .chat-tabs, .chat-wrap > .chat-tabs {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+/* Стартовый блок не должен съедать полэкрана пустотой */
+.app-shell .chat-start, .chat-start {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* Шапка и стартовый блок без собственных плашек: на снимке они читались
+   как две серые полосы поверх чёрного экрана. */
+.app-shell .chat-header, .chat-header,
+.app-shell .chat-start, .chat-start,
+.app-shell .chat-list, .chat-list,
+.app-shell .chat-replies, .chat-replies {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+}
+/* Пустота под примерами: список не растягивается на всю высоту, а панель
+   ввода стоит внизу экрана, а не после контента. */
+.app-shell .chat-wrap, .chat-wrap {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+.app-shell .chat-list, .chat-list {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* Кнопки шага: под кнопкой нужна плотная подложка, иначе она висит синей
+   полосой поверх плиток категорий. Правило с цепочкой экрана, чтобы
+   перебить прозрачный фон из старых файлов по специфичности, без !important. */
+.app-shell .screen .step-actions, .screen .step-actions {
+  background: #050505;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, .08), 0 -12px 24px rgba(0, 0, 0, .6);
+  border-radius: 16px;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+/* ── 46. Тарифы по снимку: бейдж, заголовок, воздух под доком ───────────── */
+
+/* Бейдж «Чаще берут» стоял с отрицательным отступом и обрезался скруглением
+   карточки. Теперь это чип внутри карточки, над названием плана. */
+.app-shell .plan-badge, .plan-badge {
+  position: static;
+  display: inline-flex;
+  align-self: flex-start;
+  margin: 0 0 8px;
+  height: 22px;
+  padding: 0 10px;
+}
+.app-shell .plan-card, .plan-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Заголовок шапки: 24/700 белым. Раньше «Тарифы» мельчал до 17 и серел. */
+.app-shell .top-bar-title, .top-bar-title,
+.app-shell .topbar-title, .topbar-title,
+.app-shell .chat-header-title, .chat-header-title {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+/* Процент в переключателе срока не должен слипаться с «дней» */
+.app-shell .tg2 button em, .tg2 button em {
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+/* Подпись под CTA не должна уезжать под док */
+.app-shell .tariff-note, .tariff-note,
+.app-shell .pay-hint, .pay-hint {
+  padding-bottom: calc(var(--dock-space, 96px) + 8px);
+  line-height: 1.45;
+}
+.app-shell .screen, .screen {
+  padding-bottom: calc(var(--dock-space, 96px) + 8px);
+}
+
+/* Заголовок шапки — по фактическому классу .topbar-center */
+.app-shell .topbar-center, .topbar-center {
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+  color: #fff;
+}
+/* Подпись под CTA: отступ снизу с запасом под док, иначе её режет капсула */
+/* Отступ «под док» нужен только подписи ПОД главной кнопкой экрана,
+   а не любой подсказке. Из-за этого правила подсказка внутри карточки
+   критерия растягивала её на 256 px пустоты. */
+.app-shell .screen > .chat-note, .screen > .chat-note {
+  padding-bottom: calc(var(--dock-space, 96px) + 16px);
+  line-height: 1.45;
+}
+.app-shell .hunt-crit .chat-note, .hunt-crit .chat-note,
+.app-shell .crit-card .chat-note, .crit-card .chat-note {
+  padding-bottom: 0;
+}
+
+/* ── 47. Рельс чипов по снимку: обрезка у правого края ───────────────────── */
+/* Лента чипов выходила за экран и обрывалась срезом. Теперь она скроллится
+   внутри отступов контента, а у края — мягкое затухание. */
+.app-shell .chip-rail, .chip-rail {
+  margin-right: -16px;
+  padding-right: 32px;
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+}
+.app-shell .chip-rail-label, .chip-rail-label {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+  margin: 12px 0 8px;
+}
+
+/* ── 48. Плитка категории: подпись не рисуется ──────────────────────────── */
+/* Подпись имела размер и белый цвет, но не отрисовывалась: её съедал
+   -webkit-line-clamp вместе с overflow на flex-элементе. Убираем clamp и
+   абсолютную иллюстрацию — плитка собрана обычным флексом. */
+.app-shell .cat-tile, .cat-tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.app-shell .cat-tile-label, .cat-tile-label {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 17px;
+  font-weight: 600;
+  color: #fff;
+}
+.app-shell .cat-tile-art, .cat-tile-art {
+  position: static;
+  right: auto;
+  bottom: auto;
+  width: 56px;
+  height: 56px;
+  margin-left: auto;
+  opacity: .9;
+}
+
+/* Кнопки шага: панель не должна обрезать текст кнопки */
+.app-shell .step-actions, .step-actions {
+  min-height: 56px;
+  align-items: center;
+  overflow: visible;
+}
+.app-shell .step-actions .primary-btn, .step-actions .primary-btn,
+.app-shell .step-actions .cta-button, .step-actions .cta-button {
+  height: 52px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* ── 49. Поиск: форма ссылки с Авито ────────────────────────────────────── */
+.app-shell .link-form, .link-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 16px 0 8px;
+}
+.app-shell .link-form .text-input, .link-form .text-input {
+  width: 100%;
+  height: 52px;
+  font-size: 16px;
+}
+.app-shell .link-result, .link-result {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .75);
+}
+
+/* Тексты на старте поиска не должны обрезаться многоточием */
+.app-shell .chat-hello-sub, .chat-hello-sub {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  white-space: normal;
+  line-height: 1.5;
+}
+/* Кнопка «Проверить ссылку» в неактивном виде остаётся читаемой */
+.app-shell .link-form .primary-btn:disabled, .link-form .primary-btn:disabled {
+  opacity: .55;
+  color: #fff;
+}
+/* Примеры и ссылки не уезжают под док */
+.app-shell .chat-start, .chat-start {
+  padding-bottom: calc(var(--dock-space, 96px) + 24px);
+}
+
+/* Примеры и подсказки на старте поиска не должны уходить под док */
+.app-shell .chat-start, .chat-start {
+  padding-bottom: calc(var(--dock-space, 96px) + 64px);
+}
+.app-shell .chat-examples, .chat-examples {
+  padding-bottom: 8px;
+}
+
+/* Стартовый экран поиска: содержимое должно прокручиваться, а не обрезаться
+   доком. Список получает свою прокрутку и запас снизу под капсулу с «+». */
+.app-shell .chat-wrap .chat-list, .chat-wrap .chat-list {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--dock-space, 96px) + 40px);
+}
+
+/* Плотнее на старте поиска: примеры упирались в капсулу дока на 13 px */
+.app-shell .chat-start, .chat-start {
+  padding-top: 0;
+  padding-bottom: calc(var(--dock-space, 96px) + 8px);
+}
+.app-shell .chat-hello, .chat-hello {
+  margin: 0 0 8px;
+  font-size: 24px;
+  line-height: 30px;
+}
+.app-shell .chat-hello-sub, .chat-hello-sub {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.app-shell .chat-examples, .chat-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 0;
+}
+
+/* ── 50. Плитка категории: содержимое было перекрыто своим же слоем ──────── */
+/* В старом файле у .cat-tile есть ::after с непрозрачным фоном и z-index: 1.
+   Я опустил подпись до z-index: 1, и слой её перекрыл: текст был в DOM, с
+   правильным цветом и размером, но не рисовался (0 ярких пикселей).
+   Убираем слой совсем и поднимаем содержимое над ним. */
+.app-shell .cat-tile::after, .cat-tile::after {
+  content: none;
+}
+.app-shell .cat-tile > *, .cat-tile > * {
+  position: relative;
+  z-index: 2;
+}
+.app-shell .cat-tile-label, .cat-tile-label {
+  z-index: 3;
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 17px;
+  letter-spacing: 0;
+  color: #fff;
+}
+
+/* Кнопки шага: полоса во всю ширину над доком, а не парящая пилюля */
+.app-shell .step-actions, .step-actions {
+  position: sticky;
+  bottom: calc(var(--dock-space, 96px) + 4px);
+  margin: 16px -16px 0;
+  padding: 12px 16px;
+  border-radius: 0;
+  background: #050505;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, .08);
+}
+
+/* Кнопки шага: закреплены над доком, как подвал экрана, а не «плывут» по сетке */
+.app-shell .screen .step-actions, .screen .step-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--dock-space, 96px) + 4px);
+  z-index: 20;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  background: #050505;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, .08);
+}
+/* Кнопка шага — синяя пилюля с белым текстом, как главное действие */
+.app-shell .step-actions .primary-btn, .step-actions .primary-btn,
+.app-shell .step-actions .cta-button, .step-actions .cta-button {
+  background: linear-gradient(180deg, #1F78FF 0%, #0A62F0 100%);
+  color: #fff;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 999px;
+  height: 52px;
+  font-size: 17px;
+  font-weight: 700;
+}
+/* И запас снизу, чтобы последние плитки не прятались под этой полосой */
+.app-shell .screen .category-grid, .screen .category-grid {
+  padding-bottom: 88px;
+}
+
+/* Запас под полосой «Далее»: последние плитки не должны под неё прятаться */
+.app-shell .screen .category-grid, .screen .category-grid {
+  padding-bottom: 132px;
+}
+
+/* ── 51. Экран ошибки вместо белого экрана ──────────────────────────────── */
+.app-shell .error-boundary, .error-boundary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 48px 0;
+  text-align: center;
+}
+.app-shell .error-boundary-title, .error-boundary-title {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .error-boundary-text, .error-boundary-text {
+  font-size: 15px;
+  line-height: 22px;
+  color: rgba(255, 255, 255, .65);
+}
+.app-shell .error-boundary-actions, .error-boundary-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.app-shell .error-boundary-actions > *, .error-boundary-actions > * { flex: 1; }
+
+/* ── 52. Вкладки ленты: один сегмент вместо двух отдельных пилюль ────────── */
+/* Было: две пилюли с фоном и торчащая справа плашка контейнера — читалось
+   как третья пустая вкладка. Стало: одна плита, две равные половины. */
+.app-shell .feed-switch, .feed-switch {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  height: 52px;
+  margin: 4px 0 16px;
+  border-radius: 999px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  width: 100%;
+}
+.app-shell .feed-switch button, .feed-switch button {
+  flex: 1;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(255, 255, 255, .60);
+  font-size: 15px;
+  font-weight: 600;
+  transition: none;
+  transform: none;
+}
+.app-shell .feed-switch button.is-active, .feed-switch button.is-active {
+  background: linear-gradient(180deg, #3a3a3e 0%, #2c2c30 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .20);
+  color: #fff;
+}
+
+/* Половины вкладок ленты — строго равные: flex:1 учитывал ширину текста,
+   и «Находки» выходили шире «Барахолки» (197 против 149). */
+.app-shell .feed-switch button, .feed-switch button {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Селектор с цепочкой экрана: перебивает правило компонента по специфичности,
+   без !important. Половины вкладок должны быть равными. */
+.app-shell .feed-screen .feed-switch > button,
+.app-shell .feed-screen .feed-switch > button.is-active {
+  flex: 1 1 0;
+  width: 50%;
+  min-width: 0;
+  max-width: none;
+  padding: 0 8px;
+  margin: 0;
+}
+
+/* Лимит критериев: спокойная плашка, без красного */
+.app-shell .link-limit, .link-limit {
+  width: 100%;
+  margin: 8px 0;
+  padding: 14px;
+  border-radius: 18px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .link-limit-text, .link-limit-text {
+  font-size: 14px;
+  line-height: 20px;
+  color: rgba(255, 255, 255, .72);
+}
+.app-shell .link-limit-actions, .link-limit-actions {
+  margin-top: 10px;
+}
+
+/* ── 53. Поиск лотов по макету 2026 (тёмная стилистика) ─────────────────── */
+.app-shell .hunt-h1, .hunt-h1 {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 6px 0 10px;
+}
+.app-shell .hunt-sub, .hunt-sub {
+  font-size: 15px;
+  line-height: 22px;
+  color: rgba(255, 255, 255, .60);
+  margin-bottom: 16px;
+}
+.app-shell .hunt-card, .hunt-card {
+  padding: 16px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), 0 5px 30px rgba(0, 0, 0, .45);
+  margin-bottom: 12px;
+}
+.app-shell .hunt-card-head, .hunt-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.app-shell .hunt-paste, .hunt-paste {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: #6fb6ff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.app-shell .hunt-paste svg, .hunt-paste svg { width: 18px; height: 18px; }
+.app-shell .hunt-field, .hunt-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+.app-shell .hunt-field input, .hunt-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+}
+.app-shell .hunt-field-x, .hunt-field-x {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .7);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.app-shell .hunt-from-label, .hunt-from-label {
+  margin: 14px 0 8px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .hunt-chips, .hunt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.app-shell .hunt-chip, .hunt-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}
+.app-shell .hunt-chip.is-main, .hunt-chip.is-main {
+  background: rgba(10, 132, 255, .16);
+  color: #8ec4ff;
+}
+.app-shell .hunt-cta, .hunt-cta {
+  width: 100%;
+  height: 52px;
+  margin-top: 16px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 700;
+}
+.app-shell .hunt-card-note, .hunt-card-note {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .hunt-note, .hunt-note {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .05);
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .72);
+}
+.app-shell .hunt-step, .hunt-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.app-shell .hunt-step:last-child, .hunt-step:last-child { border-bottom: 0; }
+.app-shell .hunt-step-n, .hunt-step-n {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6fb6ff;
+  min-width: 22px;
+}
+.app-shell .hunt-step-text, .hunt-step-text {
+  font-size: 15px;
+  line-height: 20px;
+  color: rgba(255, 255, 255, .78);
+}
+.app-shell .hunt-words-card, .hunt-words-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 22px;
+  background: rgba(10, 132, 255, .12);
+  box-shadow: inset 0 0 0 1px rgba(10, 132, 255, .22);
+  text-align: left;
+  cursor: pointer;
+}
+.app-shell .hunt-words-icon, .hunt-words-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .10);
+  color: #8ec4ff;
+  flex: none;
+}
+.app-shell .hunt-words-body, .hunt-words-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.app-shell .hunt-words-title, .hunt-words-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .hunt-words-sub, .hunt-words-sub {
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .55);
+}
+.app-shell .hunt-words-arrow, .hunt-words-arrow {
+  color: rgba(255, 255, 255, .5);
+  font-size: 20px;
+}
+.app-shell .topbar-link, .topbar-link {
+  border: 0;
+  background: transparent;
+  color: #6fb6ff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── 54. Критерии по макету 2026 ─────────────────────────────────────────── */
+.app-shell .crit-list, .crit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.app-shell .crit-card, .crit-card {
+  padding: 16px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), 0 5px 30px rgba(0, 0, 0, .40);
+}
+.app-shell .crit-head, .crit-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.app-shell .crit-title, .crit-title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .crit-switch, .crit-switch {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  flex: none;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .12);
+  cursor: pointer;
+  transition: background 180ms ease-out;
+}
+.app-shell .crit-switch.is-on, .crit-switch.is-on {
+  background: #0A84FF;
+}
+.app-shell .crit-switch-dot, .crit-switch-dot {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fff;
+  transition: transform 180ms ease-out;
+}
+.app-shell .crit-switch.is-on .crit-switch-dot, .crit-switch.is-on .crit-switch-dot {
+  transform: translateX(20px);
+}
+.app-shell .crit-status, .crit-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .55);
+}
+.app-shell .crit-dot, .crit-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .3);
+}
+.app-shell .crit-dot.is-on, .crit-dot.is-on { background: #38d178; }
+.app-shell .crit-chips, .crit-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+.app-shell .crit-chip, .crit-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .85);
+  font-size: 13px;
+}
+.app-shell .crit-hint, .crit-hint {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .crit-foot, .crit-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  font-size: 13px;
+  color: rgba(255, 255, 255, .5);
+}
+.app-shell .crit-remove, .crit-remove {
+  border: 0;
+  background: transparent;
+  color: #ff7a7a;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Карточка критерия: содержимое в колонку. Card — flex-строка, из-за этого
+   подвал с «Удалить» уезжал вправо от названия. */
+.app-shell .hunt-crit, .hunt-crit {
+  display: block;
+  padding: 16px;
+  border-radius: 22px;
+}
+.app-shell .hunt-crit .hunt-row, .hunt-crit .hunt-row {
+  display: block;
+}
+
+/* ── 55. Шапка критериев, сегмент и промо ────────────────────────────────── */
+.app-shell .crit-top, .crit-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.app-shell .crit-plus, .crit-plus {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.app-shell .crit-seg, .crit-seg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  height: 52px;
+  margin: 0 0 12px;
+  border-radius: 999px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .crit-seg-btn, .crit-seg-btn {
+  flex: 1 1 0;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, .60);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.app-shell .crit-seg-btn.is-on, .crit-seg-btn.is-on {
+  background: linear-gradient(180deg, #3a3a3e 0%, #2c2c30 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .20);
+  color: #fff;
+}
+.app-shell .crit-promo, .crit-promo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  background: #101418;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+.app-shell .crit-promo-badge, .crit-promo-badge {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  font-weight: 700;
+  flex: none;
+}
+.app-shell .crit-promo-body, .crit-promo-body {
+  flex: 1;
+  min-width: 0;
+}
+.app-shell .crit-promo-title, .crit-promo-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .crit-promo-sub, .crit-promo-sub {
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .55);
+}
+.app-shell .crit-promo-btn, .crit-promo-btn {
+  height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #0a0a0a;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  flex: none;
+}
+
+/* Экран «Поиск словами» по макету 02: метка, крупный заголовок, примеры */
+.app-shell .chat-kicker, .chat-kicker {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+  margin-bottom: 8px;
+}
+.app-shell .chat-final-actions, .chat-final-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.app-shell .chat-final-actions > *, .chat-final-actions > * { flex: 1; }
+
+/* Таблица условий в ответе ассистента (макет 02) */
+.app-shell .crit-grid, .crit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin: 12px 0 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .08);
+}
+.app-shell .crit-cell, .crit-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: #141414;
+}
+.app-shell .crit-cell-k, .crit-cell-k {
+  font-size: 11px;
+  line-height: 15px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .crit-cell-v, .crit-cell-v {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Диалог: моё сообщение справа и тёмной пилюлей, ответ — слева карточкой.
+   Раньше оба пузыря были одинаковыми на всю ширину, и было не понять,
+   где чья реплика. */
+.app-shell .chat-row, .chat-row {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 0 10px;
+}
+.app-shell .chat-row.is-me, .chat-row.is-me {
+  justify-content: flex-end;
+}
+.app-shell .chat-bubble, .chat-bubble {
+  max-width: 86%;
+  padding: 12px 14px;
+  border-radius: 16px 16px 16px 6px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  font-size: 15px;
+  line-height: 22px;
+  color: #fff;
+}
+.app-shell .chat-bubble.is-me, .chat-bubble.is-me {
+  border-radius: 16px 16px 6px 16px;
+  background: linear-gradient(180deg, #26262a 0%, #1a1a1c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+
+/* Последние находки под ответом (макет 02, низ карточки) */
+.app-shell .recent-block, .recent-block {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+.app-shell .recent-head, .recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .recent-all, .recent-all {
+  border: 0;
+  background: transparent;
+  color: #6fb6ff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.app-shell .recent-row, .recent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.app-shell .recent-row:last-child, .recent-row:last-child { border-bottom: 0; }
+.app-shell .recent-body, .recent-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.app-shell .recent-title, .recent-title {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-shell .recent-meta, .recent-meta {
+  font-size: 13px;
+  line-height: 18px;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .recent-price, .recent-price {
+  flex: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Кнопка создания критерия на экране «Критерии» (макет 03) */
+.app-shell .crit-create, .crit-create {
+  width: 100%;
+  height: 52px;
+  margin-top: 16px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* ── 56. Новые экраны = эталон «Находок» ──────────────────────────────────
+   Замер эталона: карточка — радиус 28, фон #141414, тень inset .10 + тёмная.
+   У новых экранов было 22–24 и градиент вместо фона — отсюда «дикий» вид.
+   Выравниваем всё к одному материалу. */
+.app-shell .hunt-card, .hunt-card,
+.app-shell .crit-card, .crit-card,
+.app-shell .hunt-crit, .hunt-crit,
+.app-shell .crit-promo, .crit-promo,
+.app-shell .link-result, .link-result,
+.app-shell .recent-block, .recent-block {
+  border-radius: 28px;
+  background: #141414;
+  background-image: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .10),
+    0 5px 30px rgba(0, 0, 0, .45);
+}
+/* Внутри карточки не должно быть второй «карточки» с другим материалом */
+.app-shell .crit-promo, .crit-promo {
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+/* Чипы — как пилюли ленты: фон #141414, радиус 999, приглушённый текст */
+.app-shell .hunt-chip, .hunt-chip,
+.app-shell .crit-chip, .crit-chip {
+  height: 36px;
+  border-radius: 999px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .80);
+  font-size: 13px;
+}
+.app-shell .hunt-chip.is-main, .hunt-chip.is-main {
+  background: #141414;
+  color: #6fb6ff;
+  box-shadow: inset 0 0 0 1px rgba(10, 132, 255, .30), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+/* Поля ввода — та же поверхность, что у строк профиля */
+.app-shell .hunt-field, .hunt-field {
+  border-radius: 16px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+/* Переключатели срока и критериев — один вид с вкладками ленты */
+.app-shell .tg2, .tg2,
+.app-shell .crit-seg, .crit-seg {
+  border-radius: 999px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+/* Карточка слов и шагов — без собственного акцентного фона */
+.app-shell .hunt-words-card, .hunt-words-card {
+  border-radius: 28px;
+  background: #141414;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .10),
+    0 5px 30px rgba(0, 0, 0, .45);
+}
+.app-shell .hunt-words-icon, .hunt-words-icon {
+  background: rgba(10, 132, 255, .16);
+  color: #6fb6ff;
+}
+
+/* Нижняя карточка не должна уезжать под док на новых экранах */
+.app-shell .screen .hunt-words-card, .screen .hunt-words-card {
+  margin-bottom: calc(var(--dock-space, 96px) + 16px);
+}
+.app-shell .screen .crit-create, .screen .crit-create {
+  margin-bottom: 8px;
+}
+
+/* Карточка критерия: одна поверхность. Внутренний .hunt-row приносил
+   собственную плашку — получалась карточка в карточке. */
+.app-shell .hunt-crit .hunt-row, .hunt-crit .hunt-row,
+.app-shell .hunt-crit .hunt-row > *, .hunt-crit .hunt-row > * {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+/* Кнопка «Создать критерий» не должна прятаться под доком */
+.app-shell .crit-create, .crit-create {
+  margin-bottom: calc(var(--dock-space, 96px) + 12px);
+}
+
+/* ── 57. Кнопки тоньше, как в референсе ───────────────────────────────────
+   Было: высота 52–56, радиус 999, шрифт 17/700 — кнопка выглядела как
+   плашка во всю ширину. В MemGift кнопка скромнее: 44 px, радиус 14,
+   текст 15/600. Она перестаёт спорить с содержимым экрана. */
+.app-shell .cta-primary, .cta-primary,
+.app-shell .btn, .btn,
+.app-shell .ghost-btn, .ghost-btn,
+.app-shell .crit-create, .crit-create {
+  height: 44px;
+  min-height: 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 0 18px;
+}
+
+/* Главная кнопка экрана — чуть заметнее остальных, но того же размера */
+.app-shell .cta-primary, .cta-primary {
+  height: 46px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Чипы-условия: 34 px вместо 44 — они не должны читаться как кнопки */
+.app-shell .hunt-chip, .hunt-chip,
+.app-shell .crit-chip, .crit-chip {
+  height: 34px;
+  padding: 0 12px;
+  font-size: 13px;
+  border-radius: 12px;
+}
+
+/* Сегменты и вкладки — 44, как строки в референсе */
+.app-shell .crit-seg, .crit-seg,
+.app-shell .crit-seg-btn, .crit-seg-btn {
+  height: 44px;
+  font-size: 14px;
+}
+
+/* ── 58. Нижняя навигация как в референсе ────────────────────────────────
+   Активная вкладка получает подсветку-плашку, а не только цвет иконки.
+   Иконки заливные (см. solidPaths в Icon.jsx), поэтому плашка читается
+   как «кнопка нажата», а не как подчёркивание. */
+.app-shell .tabbar-item, .tabbar-item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.app-shell .tabbar-item.is-active, .tabbar-item.is-active {
+  background: rgba(255, 255, 255, .12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .10);
+}
+.app-shell .tabbar-item.is-active .icon-svg, .tabbar-item.is-active .icon-svg {
+  color: #fff;
+  transform: scale(1.04);
+}
+.app-shell .tabbar-item:active, .tabbar-item:active {
+  background: rgba(255, 255, 255, .08);
+}
+
+/* ── 59. Подвижная плашка в доке ──────────────────────────────────────────
+   Одна подсветка на весь док переезжает к активной иконке. Отдельные фоны
+   у вкладок отключены: иначе видно и переезд, и мигание на месте. */
+.app-shell .tabbar-group, .tabbar-group {
+  position: relative;
+}
+.app-shell .tabbar-pill, .tabbar-pill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 48px;
+  margin-top: -24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16);
+  pointer-events: none;
+  opacity: 0;
+  transition: transform .28s cubic-bezier(.32, .72, 0, 1), width .28s cubic-bezier(.32, .72, 0, 1);
+  z-index: 0;
+}
+.app-shell .tabbar-pill.is-ready, .tabbar-pill.is-ready {
+  opacity: 1;
+  transition: transform .28s cubic-bezier(.32, .72, 0, 1),
+              width .28s cubic-bezier(.32, .72, 0, 1), opacity .15s ease;
+}
+.app-shell .tabbar-item, .tabbar-item {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+.app-shell .tabbar-item.is-active, .tabbar-item.is-active {
+  background: transparent;
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .tabbar-pill, .tabbar-pill { transition: none; }
+}
+
+/* ── 60. Цена в карточке — факт, а не кнопка ──────────────────────────────
+   Была синяя кнопка во всю ширину карточки: в ленте появлялись две
+   «кнопки» — цена и действие, и непонятно, что нажимается. В референсе
+   цена — компактная капсула с числом. Синий остаётся только для действий. */
+.app-shell .product-body .product-price, .product-body .product-price,
+.app-shell .product-price, .product-price {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .product-price:active, .product-price:active { filter: brightness(1.1); }
+
+/* Лот: галерея не должна занимать весь экран — под ней прятались название
+   и цена, и объявление открывалось «слепым». */
+.app-shell .detail-hero, .detail-hero {
+  min-height: 0;
+  max-height: 46vh;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+/* Цена в карточке «Рекомендуем» — тоже капсула, а не кнопка */
+.app-shell .recommend-price, .recommend-price {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+/* Рекомендация: пустая область под фото не должна занимать пол-карточки */
+.app-shell .recommend-card .recommend-figure, .recommend-card .recommend-figure {
+  max-height: 132px;
+  overflow: hidden;
+}
+
+/* ── 61. Загрузка выглядит загрузкой ──────────────────────────────────────
+   Плашки скелетона совпадали по цвету с фоном (#1a1a1c на #050505), и
+   экран во время запроса читался как чёрная дыра. Осветляем и добавляем
+   бегущий блик — сразу видно, что данные едут. */
+.app-shell .sk-box, .sk-box,
+.app-shell .sk-line, .sk-line {
+  background: rgba(255, 255, 255, .07);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, .07) 45%,
+    rgba(255, 255, 255, 0) 100%);
+  background-size: 320px 100%;
+  background-repeat: no-repeat;
+  animation: sk-shimmer 1.4s linear infinite;
+}
+.app-shell .sk-card, .sk-card {
+  background: #141414;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell .sk-box, .sk-box, .app-shell .sk-line, .sk-line { animation: none; }
+}
+
+/* ── 62. Подложка под фото по категории ───────────────────────────────────
+   Цвет берётся из --cat-hue, который ставит карточка. Насыщенность низкая:
+   подложка должна поддерживать фото, а не спорить с ним. Категории без
+   цвета получают нейтральный фон. */
+.app-shell .product-card .product-figure, .product-card .product-figure {
+  background:
+    radial-gradient(120% 90% at 50% 0%,
+      hsl(var(--cat-hue, 0) 42% 26% / .55) 0%,
+      hsl(var(--cat-hue, 0) 30% 12% / .25) 55%,
+      rgba(20, 20, 20, 0) 100%),
+    #141414;
+}
+.app-shell .product-card:has(.product-figure) .product-figure[style],
+.product-card .product-figure { transition: background-color .2s ease; }
+
+/* Тот же оттенок — на самую плашку фото: она перекрывала фон карточки,
+   поэтому цвет не был виден. */
+.app-shell .product-figure .media-placeholder,
+.app-shell .product-figure .media-placeholder img,
+.product-figure .media-placeholder {
+  background-color: hsl(var(--cat-hue, 0) 30% 14%);
+  background-image: radial-gradient(120% 90% at 50% 0%,
+    hsl(var(--cat-hue, 0) 45% 28% / .75) 0%,
+    hsl(var(--cat-hue, 0) 30% 13% / .35) 60%,
+    rgba(20, 20, 20, .1) 100%);
+}
+
+/* ── 63. Широкий экран: приложение остаётся телефоном ─────────────────────
+   На десктопе (от 640 px) оболочка растягивалась на всю ширину: док уезжал
+   влево, а круглая кнопка наезжала на капсулу. Держим ширину телефона и
+   центрируем, как в Telegram Web. */
+@media (min-width: 640px) {
+  .app-shell {
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .06), 0 30px 80px rgba(0, 0, 0, .6);
+    min-height: 100dvh;
+  }
+  /* Фон за пределами «телефона» — чуть темнее, чтобы граница читалась */
+  body { background: #030303; }
+  /* Док и круглая кнопка живут в границах оболочки */
+  .tabbar-wrap {
+    /* fixed-элемент центрируем полями, а не сдвигом: иначе от left:50%
+       он уезжал влево на всю ширину экрана */
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    transform: none;
+    width: 100%;
+    max-width: 480px;
+  }
+}
+
+/* ── 64. Кнопки в цвет баннеров ───────────────────────────────────────────
+   Баннеры у нас синие с градиентом, а главная кнопка была плоской заливкой
+   и выбивалась. Теперь тот же градиент плюс светящаяся обводка. */
+.app-shell .cta-primary, .cta-primary,
+.app-shell .primary-btn, .primary-btn {
+  background:
+    linear-gradient(180deg, #4c9bff 0%, #1f6bff 55%, #0a58e0 100%);
+  border: 1px solid rgba(140, 190, 255, .55);
+  color: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .35),
+    0 8px 24px rgba(31, 107, 255, .35);
+}
+.app-shell .cta-primary:active, .cta-primary:active,
+.app-shell .primary-btn:active, .primary-btn:active {
+  filter: brightness(.96);
+  transform: translateY(0.5px);
+}
+
+/* Цена в карточке — по центру: так строка читается как одна плашка */
+.app-shell .product-body .product-price, .product-body .product-price {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Сердце в избранном — голубое, а не красное: красный у нас цвет удаления */
+.app-shell .save-btn.is-on, .save-btn.is-on,
+.app-shell .cta-round.is-on, .cta-round.is-on {
+  color: #5aa9ff;
+  background: rgba(31, 107, 255, .18);
+  box-shadow: inset 0 0 0 1px rgba(90, 169, 255, .45), inset 0 1px 0 rgba(255, 255, 255, .12);
+}
+.app-shell .save-btn.is-on svg, .save-btn.is-on svg,
+.app-shell .cta-round.is-on svg, .cta-round.is-on svg {
+  fill: #5aa9ff;
+  color: #5aa9ff;
+}
+
+/* ── 65. Мелочи на экране лота ─────────────────────────────────────────── */
+/* «ЦЕНА» над числом не нужна: число и так читается как цена */
+.app-shell .detail-price-label, .detail-price-label {
+  display: none;
+}
+/* Пустой кадр без фото не должен занимать пол-экрана */
+.app-shell .detail-hero:not(:has(img)) .media-placeholder,
+.detail-slide .media-placeholder:not(:has(img)) {
+  max-height: 240px;
+}
+.app-shell .detail-hero, .detail-hero {
+  max-height: 46vh;
+}
+/* «Удалить лот из находок» — служебное действие, тише основного */
+.app-shell .detail-bar + .link-danger, .link-danger,
+.app-shell .detail-remove, .detail-remove {
+  font-size: 13px;
+  opacity: .55;
+}
+
+/* Кадр лота: без фото — не выше 34vh, с фото — 46vh. Плашка заполняет
+   кадр целиком, иначе видно шов между ней и фоном. */
+.app-shell .detail-hero, .detail-hero { max-height: 34vh; }
+.app-shell .detail-slide, .detail-slide { height: 34vh; }
+.app-shell .detail-slide .media-placeholder, .detail-slide .media-placeholder {
+  height: 100%;
+  min-height: 0;
+}
+
+/* Заголовок раздела вместо переключателя: он крупнее и не отнимает
+   полосу под таблетку, которая дублировала док. */
+.app-shell .feed-title, .feed-title {
+  margin: 2px 0 12px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+/* «Выставить товар» — действие второго плана: человек пришёл смотреть,
+   а не выставлять. Раньше это была самая крупная и яркая кнопка экрана. */
+.app-shell .board-action, .board-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  margin-top: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .10);
+  color: #9dc4ff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.app-shell .board-action:active, .board-action:active { filter: brightness(1.1); }
+
+/* Цена и действия в цвет баннеров: голубая капсула читается как «наше»,
+   серые плашки выглядели выключенными. */
+.app-shell .product-body .product-price, .product-body .product-price,
+.app-shell .recommend-price, .recommend-price {
+  background: rgba(31, 107, 255, .16);
+  color: #cfe3ff;
+  box-shadow: inset 0 0 0 1px rgba(76, 155, 255, .35),
+              inset 0 1px 0 rgba(255, 255, 255, .10);
+}
+/* Цена на экране лота — тоже голубая, а не белая */
+.app-shell .detail-price, .detail-price { color: #cfe3ff; }
+
+/* «Удалить лот из находок» — служебное действие: тихо, внизу, не красным */
+.app-shell .danger-text-btn, .danger-text-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .05);
+  color: rgba(255, 255, 255, .55);
+  font-size: 13px;
+  font-weight: 500;
+}
+.app-shell .danger-text-btn:active, .danger-text-btn:active {
+  background: rgba(255, 255, 255, .09);
+  color: rgba(255, 255, 255, .8);
+}
+
+/* Плашка живёт строго внутри дока: не вылезает за его границы и не
+   перекрывает контент, даже если замер пришёл из схлопнутой капсулы. */
+.app-shell .tabbar-group, .tabbar-group {
+  overflow: hidden;
+  isolation: isolate;
+}
+.app-shell .tabbar-pill, .tabbar-pill {
+  max-width: 100%;
+}
+
+/* ── 66. Панель действий лота — компактная, а не полоса во всю ширину ─────
+   Она липкая снизу и высотой 119 px перекрывала содержимое карточки:
+   на коротких лотах накрывала описание и фото. Делаем плавающую панель
+   по ширине контента с отступом от дока. */
+.app-shell .detail-bar, .detail-bar {
+  position: sticky;
+  bottom: 8px;
+  height: auto;
+  min-height: 0;
+  margin: 12px 0 0;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 20px;
+  background: rgba(20, 20, 20, .92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .detail-bar .cta-primary, .detail-bar .cta-primary {
+  height: 44px;
+  border-radius: 14px;
+}
+.app-shell .detail-bar .cta-round, .detail-bar .cta-round {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+}
+/* Запас снизу, чтобы панель не наезжала на последний текст */
+.app-shell .listing-page, .listing-page { padding-bottom: 24px; }
+
+/* ── 67. Карточка ленты: фото в край, цена без обводки ────────────────────
+   Было: фото с отступом внутри карточки (двойная рамка), цена в капсуле
+   с голубой обводкой — снова читалась как кнопка, сердце на полупрозрачном
+   бежевом круге выглядело грязным. */
+.app-shell .product-card, .product-card {
+  background: #141414;
+  border-radius: 20px;
+  overflow: hidden;            /* фото режется по скруглению карточки */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .product-card .product-figure, .product-card .product-figure {
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+.app-shell .product-card .product-figure .media-placeholder,
+.product-card .product-figure .media-placeholder {
+  border-radius: 0;
+}
+.app-shell .product-body, .product-body {
+  padding: 10px 12px 12px;
+}
+.app-shell .product-card .product-price, .product-card .product-price {
+  margin-top: 10px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .07);
+  box-shadow: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  height: 34px;
+}
+/* Сердце: плотный тёмный круг, белая иконка — читается на любом фото */
+.app-shell .product-figure .save-btn, .product-figure .save-btn {
+  background: rgba(10, 10, 10, .72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
+  color: #fff;
+}
+.app-shell .save-btn.is-on, .save-btn.is-on {
+  background: rgba(31, 107, 255, .85);
+  color: #fff;
+}
+
+/* Название лота — белое: серое читалось как «недоступно» */
+.app-shell .product-name, .product-name {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.app-shell .product-meta, .product-meta {
+  color: rgba(255, 255, 255, .45);
+  font-size: 12px;
+  margin-top: 4px;
+}
+/* Цена в «Рекомендуем» — без голубой обводки */
+.app-shell .recommend-price, .recommend-price {
+  border: 0;
+  box-shadow: none;
+}
+
+/* ── 68. Кнопки как в референсе: плоский насыщенный синий ─────────────────
+   У MemGift кнопки и цена — ровный яркий синий без градиента, без свечения
+   и без обводки. У нас были градиент + светящаяся рамка, из-за этого
+   интерфейс выглядел «веб-два-ноль», а не как референс. */
+.app-shell .cta-primary, .cta-primary,
+.app-shell .primary-btn, .primary-btn {
+  background: #2a66ff;
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+  border-radius: 14px;
+  height: 46px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.app-shell .cta-primary:active, .cta-primary:active { background: #245be6; filter: none; }
+
+/* Цена в карточке — такая же плоская синяя плашка, как кнопка покупки
+   в референсе */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+  margin-top: 10px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: #2a66ff;
+  box-shadow: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+/* Крупная цена на лоте остаётся текстом, но чистого синего */
+.app-shell .detail-price, .detail-price { color: #cfe3ff; }
+
+/* Цена и главное действие не должны быть одного веса: кнопка «Открыть» —
+   единственная сплошная синяя, цена — тише, но того же оттенка. */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  background: rgba(42, 102, 255, .16);
+  color: #dbe9ff;
+  box-shadow: none;
+}
+
+/* ── 69. Цена — как кнопка цены в референсе ──────────────────────────────
+   Не тёмная подложка и не узкая плашка, а яркая синяя пилюля с белым
+   числом, скруглением 999 и светлой полосой сверху. */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  margin-top: 10px;
+  padding: 0 14px;
+  border: 1px solid rgba(140, 190, 255, .45);
+  border-radius: 999px;
+  background: #1e7bff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Плашка активной вкладки — без обводки и светлой полосы сверху:
+   остаётся только ровная заливка, как в референсе. */
+.app-shell .tabbar-pill, .tabbar-pill,
+.app-shell .tabbar-pill.is-ready, .tabbar-pill.is-ready {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+/* Цена — ровная синяя пилюля без обводки и светлой полосы: рамка из
+   прошлой правки читалась как контур и портила вид. */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  background: #1e7bff;
+  color: #fff;
+}
+
+/* Цена: тонкая светлая окантовка по контуру, как в референсе — не яркая
+   рамка и не полоса сверху, а мягкий 1 px свет по краю. */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  border: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22);
+}
+
+/* Текст цены — чистый белый: наследовался голубой #CFE3FF и выглядел серым */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Панель действий — в обычном потоке, ПОСЛЕ содержимого.
+   sticky с bottom цеплялся к верху, когда контента мало: панель оказывалась
+   над карточкой и перекрывала её. Статичное положение предсказуемо. */
+.app-shell .detail-bar, .detail-bar {
+  position: static;
+  bottom: auto;
+  margin: 16px 0 0;
+  padding: 8px;
+  border-radius: 20px;
+}
+
+/* Внутренняя группа дока не должна иметь своей плашки: из-за неё при
+   открытии казалось, что подсвечен весь док целиком, а не одна вкладка. */
+.app-shell .tabbar-group, .tabbar-group {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+}
+
+/* Цена: обводка не по всему контуру, а светлым на верхнем левом и нижнем
+   правом углу — как в референсе. Делается двумя слоями фона: заливка по
+   padding-box и градиентная рамка по border-box. */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  border: 1px solid transparent;
+  box-shadow: none;
+  background:
+    linear-gradient(#1e7bff, #1e7bff) padding-box,
+    linear-gradient(140deg,
+      rgba(255, 255, 255, .60) 0%,
+      rgba(255, 255, 255, .08) 32%,
+      rgba(255, 255, 255, .08) 68%,
+      rgba(255, 255, 255, .50) 100%) border-box;
+}
+
+/* Фото в карточке — со скруглением сверху, как в референсе. Я сам убрал
+   его, когда делал фото «в край», и получил прямоугольник в круглой карточке. */
+.app-shell .product-card .product-figure, .product-card .product-figure {
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+}
+.app-shell .product-card .product-figure .media-placeholder,
+.product-card .product-figure .media-placeholder {
+  border-radius: 20px 20px 0 0;
+}
+.app-shell .product-card .product-figure img,
+.product-card .product-figure img {
+  border-radius: 20px 20px 0 0;
+}
+
+/* Окантовка цены — ГОЛУБАЯ, а не белая: белый по синему даёт серый,
+   это и было видно как «серая рамка». */
+.app-shell .product-card .product-price, .product-card .product-price,
+.app-shell .recommend-price, .recommend-price {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#1e7bff, #1e7bff) padding-box,
+    linear-gradient(140deg,
+      rgba(150, 200, 255, .95) 0%,
+      rgba(120, 175, 255, .25) 34%,
+      rgba(120, 175, 255, .25) 66%,
+      rgba(150, 200, 255, .85) 100%) border-box;
+}
+
+/* У панели действий не должно быть тяжёлой тени: она ложилась на кнопки
+   под панелью и перекрывала их тёмной пеленой. */
+.app-shell .detail-bar, .detail-bar {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: #141414;
+  margin: 16px 0 8px;
+}
+
+/* ── 70. Один синий на всё приложение ─────────────────────────────────────
+   Сейчас в интерфейсе жили три разных синих: #0A84FF (--accent),
+   #2A66FF (кнопки) и #1E7BFF (цена). Из-за этого кнопка в панели лота
+   выглядела тёмной и «не нашей». Оставляем один токен и одно значение. */
+:root {
+  --accent: #1E7BFF;
+  --accent-strong: #1A6FE6;
+  --accent-soft: rgba(30, 123, 255, .16);
+}
+
+.app-shell .cta-primary, .cta-primary,
+.app-shell .primary-btn, .primary-btn,
+.app-shell .detail-bar .cta-primary, .detail-bar .cta-primary,
+.app-shell .btn-primary, .btn-primary {
+  background: #1E7BFF;
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+}
+.app-shell .cta-primary:active, .cta-primary:active,
+.app-shell .detail-bar .cta-primary:active, .detail-bar .cta-primary:active {
+  background: #1A6FE6;
+}
+
+/* Ссылки и акцентные иконки — тот же синий, но светлее */
+.app-shell .link-accent, .link-accent,
+.app-shell .crit-open, .crit-open {
+  color: #6FB6FF;
+}
+
+/* Чипы-условия: мягкая подложка того же оттенка */
+.app-shell .hunt-chip.is-main, .hunt-chip.is-main,
+.app-shell .crit-chip.is-main, .crit-chip.is-main {
+  background: rgba(30, 123, 255, .16);
+  color: #9DC4FF;
+  box-shadow: inset 0 0 0 1px rgba(30, 123, 255, .35);
+}
+
+/* Кнопки на тарифах и в создании объявления жили на градиенте
+   #3890FF→#1470F5 из memgift-final.css и выбивались из общего синего. */
+.app-shell .primary-btn, .primary-btn,
+.app-shell .cta-button, .cta-button {
+  background: #1E7BFF;
+  background-image: none;
+  border: 0;
+  border-radius: 14px;
+  min-height: 44px;
+  height: 44px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: none;
+}
+.app-shell .primary-btn:active, .primary-btn:active,
+.app-shell .cta-button:active, .cta-button:active {
+  background: #1A6FE6;
+}
+
+/* ── 71. Док без дрожи ────────────────────────────────────────────────────
+   space-around распределял вкладки по остатку ширины: при любой смене
+   экрана (скролл, появление док) доли пересчитывались, и плашка ездила
+   туда-сюда. Фиксированные ширина и зазор делают позиции постоянными. */
+.app-shell .tabbar-group, .tabbar-group {
+  justify-content: center;
+  gap: 8px;
+}
+.app-shell .tabbar-item, .tabbar-item {
+  flex: 0 0 68px;
+  width: 68px;
+}
+.app-shell .tabbar-pill, .tabbar-pill {
+  transition: transform .26s cubic-bezier(.32, .72, 0, 1);
+  will-change: transform;
+}
+
+/* ── 72. Подсветка вкладки без движения ───────────────────────────────────
+   Переезжающая плашка дёргалась: её позиция зависела от замера, а замер —
+   от момента рендера. Статичный фон у активной вкладки не двигается вовсе. */
+.app-shell .tabbar-pill, .tabbar-pill { display: none; }
+
+.app-shell .tabbar-group, .tabbar-group {
+  justify-content: space-around;
+  gap: 0;
+}
+.app-shell .tabbar-item, .tabbar-item {
+  flex: 1 1 0;
+  width: auto;
+  height: 44px;
+  border-radius: 999px;
+  transition: background-color .12s ease;
+}
+.app-shell .tabbar-item.is-active, .tabbar-item.is-active {
+  background: rgba(255, 255, 255, .14);
+  box-shadow: none;
+}
+
+/* Подсветка стояла вплотную к левому краю капсулы и казалась сдвинутой:
+   у группы не было внутреннего отступа, а вкладки растягивались до краёв. */
+.app-shell .tabbar-group, .tabbar-group {
+  padding: 0 6px;
+  gap: 4px;
+}
+.app-shell .tabbar-item, .tabbar-item {
+  flex: 1 1 0;
+  max-width: 64px;
+  height: 44px;
+  margin: 0 auto;
+}
+
+/* Плашка активной вкладки — по пропорциям референса: широкая и почти в
+   высоту капсулы. Было 64×44, из-за этого читалась как маленький кружок. */
+.app-shell .tabbar-group, .tabbar-group {
+  padding: 0 8px;
+  gap: 2px;
+}
+.app-shell .tabbar-item, .tabbar-item {
+  flex: 1 1 0;
+  max-width: 88px;
+  height: 48px;
+  margin: 0 auto;
+}
+
+/* ── 73. Док по варианту A (MemGift) ──────────────────────────────────────
+   Плашка — четверть капсулы и 80 % её высоты, светлая, без обводки.
+   Кнопка «+» стоит рядом, а не наезжает на капсулу. */
+.app-shell .tabbar, .tabbar { height: 62px; padding: 0 6px; }
+.app-shell .tabbar-group, .tabbar-group {
+  padding: 0 2px;
+  gap: 0;
+}
+.app-shell .tabbar-item, .tabbar-item {
+  flex: 1 1 0;
+  max-width: none;
+  width: auto;
+  height: 50px;            /* 80 % от 62 */
+  margin: 0 2px;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+}
+.app-shell .tabbar-item.is-active, .tabbar-item.is-active {
+  background: rgba(255, 255, 255, .10);
+  box-shadow: none;
+}
+.app-shell .tabbar-item .icon-svg, .tabbar-item .icon-svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── 74. Док по точным замерам с видео-референса ──────────────────────────
+   Снял кадр, обрезал док и перевёл в CSS-пиксели (делим на 3):
+   капсула 54 px, плашка 85×40 (≈24 % ширины, 74 % высоты), иконки 22. */
+.app-shell .tabbar, .tabbar {
+  height: 54px;
+  padding: 0 5px;
+}
+.app-shell .tabbar-group, .tabbar-group {
+  padding: 0 2px;
+  gap: 0;
+}
+.app-shell .tabbar-item, .tabbar-item {
+  flex: 1 1 0;
+  max-width: none;
+  width: auto;
+  height: 40px;
+  margin: 0 2px;
+  border-radius: 999px;
+  background: transparent;
+}
+.app-shell .tabbar-item.is-active, .tabbar-item.is-active {
+  background: rgba(255, 255, 255, .12);
+  box-shadow: none;
+}
+.app-shell .tabbar-item .icon-svg, .tabbar-item .icon-svg {
+  width: 22px;
+  height: 22px;
+}
+.app-shell .tabbar-fab, .tabbar-fab {
+  width: 54px;
+  height: 54px;
+}
+
+/* ── 75. Разделы: строки-пункты как в MemGift ─────────────────────────────
+   Профиль, тарифы, избранное и создание объявления выглядели «как попало»:
+   пункты без границ, без стрелок, непонятно, что нажимается. Правим
+   материал и понятность: одна карточка-список, строки 56 px, стрелка справа,
+   заметный отклик на нажатие, подписи секций капсом. */
+.app-shell .list-group, .list-group,
+.app-shell .settings-card, .settings-card {
+  background: #141414;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+.app-shell .menu-left, .menu-left { color: #fff; font-size: 15px; font-weight: 500; }
+.app-shell .menu-arrow, .menu-arrow {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .07);
+  color: rgba(255, 255, 255, .65);
+  font-size: 15px;
+}
+
+/* Любой кликабельный пункт: строка 56, разделитель, отклик */
+.app-shell .list-row, .list-row,
+.app-shell .setting-row, .setting-row,
+.app-shell .tcl-row, .tcl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 14px;
+  color: #fff;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  transition: background-color .12s ease;
+}
+.app-shell .list-row + .list-row, .list-row + .list-row,
+.app-shell .setting-row + .setting-row, .setting-row + .setting-row {
+  border-top: 1px solid rgba(255, 255, 255, .06);
+}
+.app-shell .list-row:active, .list-row:active,
+.app-shell .setting-row:active, .setting-row:active,
+.app-shell .tcl-row:active, .tcl-row:active {
+  background: rgba(255, 255, 255, .06);
+}
+
+/* Подпись секции — капсом, как в референсе */
+.app-shell .row-title, .row-title,
+.app-shell .section-label, .section-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .45px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+  padding: 18px 14px 8px;
+}
+
+/* Кнопки-действия в этих разделах: одна сплошная синяя, остальные тихие */
+.app-shell .ghost-btn, .ghost-btn,
+.app-shell .tool-btn, .tool-btn {
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .07);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .ghost-btn:active, .ghost-btn:active,
+.app-shell .tool-btn:active, .tool-btn:active { background: rgba(255, 255, 255, .12); }
+
+/* Поля ввода: видны как поля, а не как текст */
+.app-shell .text-input, .text-input,
+.app-shell .field-wrap input, .field-wrap input {
+  height: 48px;
+  border-radius: 14px;
+  background: #141414;
+  border: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+  color: #fff;
+  font-size: 15px;
+  padding: 0 14px;
+}
+.app-shell .text-input::placeholder, .text-input::placeholder,
+.app-shell .field-wrap input::placeholder { color: rgba(255, 255, 255, .35); }
+.app-shell .text-input:focus, .text-input:focus,
+.app-shell .field-wrap input:focus {
+  outline: 0;
+  box-shadow: inset 0 0 0 1.5px rgba(30, 123, 255, .75);
+}
+
+/* ── 76. Сравнение тарифов: таблица, а не текст в строку ──────────────────
+   Было: «Критерии 1 10» и «Чат через 15 мин сразу» шли подряд и читались
+   как случайный набор слов. Теперь три колонки и заголовок-шапка. */
+.app-shell .tariff-compare, .tariff-compare,
+.app-shell .tariff-compare-line, .tariff-compare-line {
+  background: #141414;
+  border-radius: 20px;
+  padding: 4px 6px 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .tcl-head, .tcl-head,
+.app-shell .tcl-row, .tcl-row {
+  display: grid;
+  grid-template-columns: 1.5fr .9fr .9fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 10px;
+  font-size: 14px;
+}
+.app-shell .tcl-head, .tcl-head {
+  min-height: 40px;
+  color: rgba(255, 255, 255, .45);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.app-shell .tcl-head > span:nth-child(2), .tcl-head > span:nth-child(2) { text-align: right; }
+.app-shell .tcl-head > span:nth-child(3), .tcl-head > span:nth-child(3) { text-align: right; }
+.app-shell .tcl-row, .tcl-row { color: #fff; }
+.app-shell .tcl-row > span:first-child, .tcl-row > span:first-child {
+  color: rgba(255, 255, 255, .75);
+  font-weight: 500;
+}
+.app-shell .tcl-row > span:nth-child(2), .tcl-row > span:nth-child(2),
+.app-shell .tcl-row > span:nth-child(3), .tcl-row > span:nth-child(3) {
+  text-align: right;
+  font-weight: 600;
+}
+.app-shell .tcl-row + .tcl-row, .tcl-row + .tcl-row {
+  border-top: 1px solid rgba(255, 255, 255, .05);
+}
+
+/* ── 77. Поиск лотов по макету ─────────────────────────────────────────── */
+.app-shell .hunt-eta, .hunt-eta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, .55);
+  text-align: center;
+}
+.app-shell .hunt-eta-dot, .hunt-eta-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #5AA9FF;
+  box-shadow: 0 0 8px rgba(90, 169, 255, .8);
+}
+/* Шаги в одну строку */
+.app-shell .hunt-steps-row, .hunt-steps-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 18px 0 6px;
+  padding: 0 2px;
+}
+.app-shell .hunt-step-mini, .hunt-step-mini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+.app-shell .hunt-step-dot, .hunt-step-dot {
+  display: grid;
+  place-items: center;
+  width: 22px; height: 22px;
+  flex: 0 0 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  color: rgba(255, 255, 255, .70);
+  font-size: 11px;
+  font-weight: 700;
+}
+.app-shell .hunt-step-mini-text, .hunt-step-mini-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, .50);
+  line-height: 1.2;
+}
+.app-shell .hunt-step-sep, .hunt-step-sep {
+  flex: 0 0 10px;
+  height: 1px;
+  margin-left: auto;
+  background: rgba(255, 255, 255, .12);
+}
+
+/* ── 78. Поиск лотов: поле видно, кнопка яркая ─────────────────────────── */
+.app-shell .hunt-field, .hunt-field {
+  background: #0f0f0f;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .10);
+  margin-top: 10px;
+}
+.app-shell .hunt-field input, .hunt-field input {
+  height: 52px;
+  padding: 0 14px;
+  background: transparent;
+  border: 0;
+  color: #fff;
+  font-size: 15px;
+}
+.app-shell .hunt-field input::placeholder, .hunt-field input::placeholder {
+  color: rgba(255, 255, 255, .38);
+}
+.app-shell .hunt-field:focus-within, .hunt-field:focus-within {
+  box-shadow: inset 0 0 0 1.5px rgba(30, 123, 255, .8);
+}
+
+/* Кнопка «Найти лоты»: выключенное состояние тоже читается синим */
+.app-shell .hunt-cta, .hunt-cta {
+  height: 50px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.app-shell .hunt-cta:disabled, .hunt-cta:disabled,
+.app-shell .hunt-cta[disabled], .hunt-cta[disabled] {
+  background: rgba(30, 123, 255, .45);
+  color: rgba(255, 255, 255, .85);
+  opacity: 1;
+}
+
+/* Кнопка поиска: включённая — сплошной #1E7BFF, выключенная — тоже синяя,
+   но приглушённая, без «стеклянного» вида. */
+.app-shell .hunt-cta:not(:disabled), .hunt-cta:not(:disabled) {
+  background: #1E7BFF;
+  color: #fff;
+  box-shadow: none;
+}
+.app-shell .hunt-cta:disabled, .hunt-cta:disabled {
+  background: #1A4FA8;
+  color: rgba(255, 255, 255, .75);
+  box-shadow: none;
+}
+/* Подпись под кнопкой — в одну строку */
+.app-shell .hunt-eta, .hunt-eta {
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+/* ── 79. Тарифы: выбор срока и карточка плана как в макете ──────────────── */
+/* Переключатель сроков — три равных сегмента */
+.app-shell .tg2, .tg2 {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+.app-shell .tg2 > button, .tg2 > button {
+  height: 56px;
+  border: 0;
+  border-radius: 16px;
+  background: #141414;
+  color: rgba(255, 255, 255, .70);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+.app-shell .tg2 > button.on, .tg2 > button.on {
+  background: rgba(30, 123, 255, .16);
+  color: #fff;
+  box-shadow: inset 0 0 0 1.5px rgba(30, 123, 255, .85);
+}
+.app-shell .tg2 > button em, .tg2 > button em {
+  font-style: normal;
+  color: #7ee2a8;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+/* Карточка «Плюс»: цена крупно, состав списком */
+.app-shell .plan-card, .plan-card {
+  position: relative;
+  margin-top: 12px;
+  padding: 18px 16px 16px;
+  border-radius: 20px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .plan-badge, .plan-badge {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  height: 22px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #1E7BFF;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+.app-shell .plan-top, .plan-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.app-shell .plan-top b, .plan-top b { font-size: 17px; font-weight: 700; color: #fff; }
+.app-shell .plan-top span, .plan-top span {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.app-shell .plan-top small, .plan-top small {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, .45);
+  letter-spacing: 0;
+}
+.app-shell .plan-ft, .plan-ft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, .75);
+}
+.app-shell .plan-ft i, .plan-ft i {
+  display: grid;
+  place-items: center;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: rgba(30, 123, 255, .18);
+  color: #6FB6FF;
+  font-style: normal;
+  font-size: 11px;
+}
+
+/* Переключатель сравнения: тихая ссылка-строка, не кнопка */
+.app-shell .compare-toggle, .compare-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  margin: 4px 0 6px;
+  padding: 0 2px;
+  background: transparent;
+  border: 0;
+  color: #6FB6FF;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+.app-shell .compare-toggle-arrow, .compare-toggle-arrow {
+  margin-left: auto;
+  font-size: 18px;
+  color: rgba(255, 255, 255, .45);
+  transform: rotate(90deg);
+  transition: transform .15s ease;
+}
+.app-shell .compare-toggle-arrow.is-open, .compare-toggle-arrow.is-open {
+  transform: rotate(-90deg);
+}
+
+/* ── 80. Карточки сроков как в макете Superdesign ────────────────────────
+   2 колонки, высота 140, радиус 20, цена 20/700, у выбранной — рамка
+   акцентом и бейдж сверху. Это не сегменты: в макете именно карточки. */
+.app-shell .term-grid, .term-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0 8px;
+}
+.app-shell .term-card, .term-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140px;
+  padding: 16px;
+  border-radius: 20px;
+  background: #141414;
+  border: 1.5px solid rgba(255, 255, 255, .06);
+  box-shadow: none;
+  text-align: left;
+  color: #fff;
+}
+.app-shell .term-card.is-on, .term-card.is-on {
+  border-color: #1E7BFF;
+  background: rgba(30, 123, 255, .06);
+}
+.app-shell .term-badge, .term-badge {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 22px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #1E7BFF;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+.app-shell .term-head, .term-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.app-shell .term-days, .term-days {
+  font-size: 14px;
+  color: rgba(255, 255, 255, .60);
+}
+.app-shell .term-discount, .term-discount {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(52, 199, 123, .12);
+  color: #34C77B;
+  font-size: 10px;
+  font-weight: 700;
+}
+.app-shell .term-price, .term-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.app-shell .term-amount, .term-amount {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+.app-shell .term-perday, .term-perday {
+  font-size: 12px;
+  color: #6FB6FF;
+}
+.app-shell .term-old, .term-old {
+  font-size: 12px;
+  color: rgba(255, 255, 255, .40);
+  text-decoration: line-through;
+}
+
+/* ── 81. Создание объявления по макету Superdesign (вариант A) ─────────── */
+/* Шаг: «1 из 5» справа, полоса прогресса под ним, без длинного заголовка */
+.app-shell .step-indicator, .step-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 16px;
+}
+.app-shell .step-indicator > span, .step-indicator > span {
+  order: 2;
+  align-self: flex-end;
+  font-size: 13px;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .step-bar, .step-bar {
+  order: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .08);
+  overflow: hidden;
+}
+.app-shell .step-bar > span, .step-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #1E7BFF;
+  transition: width .25s ease;
+}
+
+/* Заголовок шага — крупно, как «Выберите категорию» в макете */
+.app-shell .ad-form .field-label-row, .ad-form .field-label-row {
+  margin: 18px 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  color: #fff;
+}
+.app-shell .ad-form .field-label-row:first-of-type, .ad-form .field-label-row:first-of-type {
+  margin-top: 0;
+}
+
+/* Категории — карточки 2 колонки с иконкой сверху, как в макете */
+.app-shell .category-grid, .category-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.app-shell .cat-tile, .cat-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  aspect-ratio: auto;
+  height: 120px;
+  padding: 0;
+  border-radius: 18px;
+  background: #141414;
+  border: 1.5px solid rgba(255, 255, 255, .06);
+  box-shadow: none;
+}
+.app-shell .cat-tile.is-selected, .cat-tile.is-selected {
+  border-color: #1E7BFF;
+  background: rgba(30, 123, 255, .07);
+}
+.app-shell .cat-tile-art, .cat-tile-art {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  opacity: .9;
+}
+.app-shell .cat-tile-label, .cat-tile-label {
+  position: static;
+  z-index: 2;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Кнопки шага: «Далее» сплошная, «Назад» тихая, обе 46 */
+.app-shell .step-actions, .step-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.app-shell .step-actions .primary-btn, .step-actions .primary-btn {
+  flex: 1;
+  height: 46px;
+  border-radius: 14px;
+  background: #1E7BFF;
+  font-size: 16px;
+  font-weight: 700;
+}
+.app-shell .step-actions .ghost-btn, .step-actions .ghost-btn {
+  flex: 0 0 96px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .07);
+}
+
+/* Плитка категории: иконка сверху, подпись под ней по центру —
+   сейчас арт стоит справа внизу и текст «плывёт» */
+.app-shell .cat-tile, .cat-tile {
+  position: relative;
+  justify-content: center;
+  padding: 14px 10px;
+  gap: 8px;
+}
+.app-shell .cat-tile-art, .cat-tile-art {
+  position: static;
+  order: 1;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
+.app-shell .cat-tile-label, .cat-tile-label {
+  position: static;
+  order: 2;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+/* ── 82. Шаги 2–5 формы по макету (вариант B) ───────────────────────────── */
+/* Подпись поля — капсом, 12, приглушённая */
+.app-shell .ad-form .field-label-row, .ad-form .field-label-row {
+  margin: 20px 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .45px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+}
+/* Само поле: 48, радиус 14, тёмное, с рамкой */
+.app-shell .ad-form .text-input, .ad-form .text-input,
+.app-shell .ad-form textarea, .ad-form textarea {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, .08);
+  color: #fff;
+  font-size: 15px;
+}
+.app-shell .ad-form textarea, .ad-form textarea {
+  height: auto;
+  min-height: 120px;
+  padding: 12px 14px;
+  line-height: 1.45;
+  resize: vertical;
+}
+.app-shell .ad-form .text-input::placeholder, .ad-form .text-input::placeholder,
+.app-shell .ad-form textarea::placeholder, .ad-form textarea::placeholder {
+  color: rgba(255, 255, 255, .35);
+}
+.app-shell .ad-form .text-input:focus, .ad-form .text-input:focus,
+.app-shell .ad-form textarea:focus, .ad-form textarea:focus {
+  outline: 0;
+  border-color: #1E7BFF;
+}
+/* Подсказка под полем */
+.app-shell .ad-form .hint-note, .ad-form .hint-note,
+.app-shell .ad-form .plan-desc, .ad-form .plan-desc {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, .40);
+}
+/* Плитка добавления фото — пунктирная, с иконкой камеры */
+.app-shell .ad-form .photo-add, .ad-form .photo-add,
+.app-shell .ad-form .photo-tile-add, .ad-form .photo-tile-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 108px;
+  height: 108px;
+  border-radius: 14px;
+  border: 1.5px dashed rgba(255, 255, 255, .18);
+  background: transparent;
+  color: rgba(255, 255, 255, .55);
+  font-size: 12px;
+}
+
+/* Плитка категории должна ловить нажатие: декор внутри не перекрывает клик,
+   а сама плитка поднята над сеткой. */
+.app-shell .category-grid, .category-grid { position: relative; }
+.app-shell .cat-tile, .cat-tile {
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+.app-shell .cat-tile > *, .cat-tile > * { pointer-events: none; }
+.app-shell .cat-tile::after, .cat-tile::after { content: none; }
+
+/* Сетка категорий не должна перехватывать клики: её слой декоративный */
+.app-shell .category-grid, .category-grid {
+  pointer-events: none;
+}
+.app-shell .category-grid > *, .category-grid > * {
+  pointer-events: auto;
+}
+.app-shell .category-grid::before, .category-grid::before,
+.app-shell .category-grid::after, .category-grid::after {
+  content: none;
+  display: none;
+}
+
+/* ── 83. Поиск лотов: значения дословно из HTML макета Superdesign ────────
+   Карточка: p-5 (20), радиус 28, рамка rgba(255,255,255,.05), тень.
+   Поле: h 46, радиус 20, фон black/40 (rgba(0,0,0,.4)), рамка .10, pr 96,
+   кнопка «Вставить» ВНУТРИ поля справа (h 32, px 16, пилюля, white/10).
+   Кнопка «Найти лоты»: h 46, радиус 14, акцент, стрелка справа, gap 8. */
+.app-shell .hunt-card, .hunt-card {
+  padding: 20px;
+  border-radius: 28px;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, .05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, .45);
+}
+.app-shell .hunt-field, .hunt-field {
+  position: relative;
+  height: 46px;
+  padding: 0;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, .40);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, .10);
+}
+.app-shell .hunt-field input, .hunt-field input {
+  height: 46px;
+  padding: 0 96px 0 16px;
+  border-radius: 20px;
+  background: transparent;
+  font-size: 14px;
+}
+.app-shell .hunt-field .hunt-paste, .hunt-field .hunt-paste,
+.app-shell .hunt-paste, .hunt-paste {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .10);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  border: 0;
+}
+.app-shell .hunt-cta, .hunt-cta {
+  height: 46px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.app-shell .hunt-cta::after, .hunt-cta::after {
+  content: '→';
+  font-size: 17px;
+  line-height: 1;
+}
+/* Шаги: круг 36 с номером и подпись под ним, как в макете */
+.app-shell .hunt-steps-row, .hunt-steps-row {
+  align-items: flex-start;
+  margin: 20px 0 8px;
+}
+.app-shell .hunt-step-mini, .hunt-step-mini {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+.app-shell .hunt-step-dot, .hunt-step-dot {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, .06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+.app-shell .hunt-step-mini-text, .hunt-step-mini-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, .45);
+  max-width: 90px;
+}
+.app-shell .hunt-step-sep, .hunt-step-sep {
+  display: none;
+}
+
+/* Заголовок карточки и подпись — как в макете */
+.app-shell .hunt-card-head, .hunt-card-head {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.app-shell .hunt-card-sub, .hunt-card-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, .45);
+  margin-bottom: 14px;
+}
+
+/* ── 84. Карточка товара по макету Superdesign ─────────────────────────── */
+/* Цена — синяя пилюля 44, радиус 999, 28/700 */
+.app-shell .detail-price-block, .detail-price-block { margin: 14px 0 12px; }
+.app-shell .detail-price, .detail-price {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: #1E7BFF;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+/* Название 24/700, две строки */
+.app-shell .detail-head .listing-title, .detail-head .listing-title,
+.app-shell .listing-title, .listing-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+/* Метки: тёмные пилюли 34 с иконкой */
+.app-shell .listing-tags, .listing-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.app-shell .listing-tags .tag, .listing-tags .tag,
+.app-shell .detail-head .tag, .detail-head .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+  color: rgba(255, 255, 255, .75);
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: none;
+}
+/* Описание */
+.app-shell .detail-desc, .detail-desc,
+.app-shell .listing-desc, .listing-desc {
+  font-size: 15px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, .70);
+  margin-top: 14px;
+}
+/* Служебное удаление — серое, по центру, мелкое */
+.app-shell .danger-text-btn, .danger-text-btn {
+  display: block;
+  margin: 18px auto 0;
+  background: transparent;
+  color: rgba(255, 255, 255, .35);
+  font-size: 13px;
+  font-weight: 500;
+  height: auto;
+  padding: 8px 12px;
+  text-align: center;
+}
+/* Панель действий: кнопка-пилюля + два круга, как в макете */
+.app-shell .detail-bar, .detail-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  background: #141414;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+}
+.app-shell .detail-bar .cta-primary, .detail-bar .cta-primary {
+  flex: 1;
+  height: 44px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.app-shell .detail-bar .cta-round, .detail-bar .cta-round {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+}
+
+/* ── 85. Лот: счётчик кадра пилюлей, галерея 52%, «Показать полностью» ──── */
+.app-shell .detail-counter, .detail-counter {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  height: 28px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, .60);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+/* Галерея: чуть ниже половины экрана, низ со скруглением */
+.app-shell .detail-hero, .detail-hero,
+.app-shell .detail-slide, .detail-slide {
+  height: 52vh;
+  max-height: 52vh;
+}
+.app-shell .detail-hero, .detail-hero {
+  border-radius: 0 0 28px 28px;
+  overflow: hidden;
+}
+/* «Показать полностью» — акцентная ссылка под описанием */
+.app-shell .desc-toggle, .desc-toggle,
+.app-shell .detail-desc-toggle, .detail-desc-toggle {
+  margin-top: 8px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #6FB6FF;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Блок описания: не «карточка в карточке», а спокойный текст */
+.app-shell .copy-block, .copy-block {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin-top: 16px;
+}
+.app-shell .copy-block strong, .copy-block strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .45px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .listing-desc.is-clamped, .listing-desc.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.app-shell .listing-desc-toggle, .listing-desc-toggle {
+  margin-top: 8px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #6FB6FF;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ── 86. Избранное и мои объявления по макету Superdesign ──────────────── */
+/* Строка избранного: фото 96 слева, текст справа, корзина в углу */
+.app-shell .favorite-row, .favorite-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 20px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
+  margin-bottom: 10px;
+}
+.app-shell .favorite-row .result-thumb, .favorite-row .result-thumb {
+  flex: 0 0 96px;
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0f0f0f;
+}
+.app-shell .favorite-row .result-thumb .media-placeholder,
+.favorite-row .result-thumb .media-placeholder {
+  border-radius: 14px;
+  height: 100%;
+}
+/* Цена в строке — компактная пилюля */
+.app-shell .favorite-row .result-price, .favorite-row .result-price {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 10px;
+  margin-bottom: 6px;
+  border-radius: 999px;
+  background: rgba(30, 123, 255, .16);
+  color: #cfe3ff;
+  font-size: 14px;
+  font-weight: 700;
+}
+.app-shell .favorite-row .row-title, .favorite-row .row-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.app-shell .favorite-row .product-city, .favorite-row .product-city {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, .40);
+}
+.app-shell .favorite-remove, .favorite-remove {
+  align-self: flex-start;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .06);
+  color: rgba(255, 255, 255, .55);
+  border: 0;
+}
+/* Пустое состояние: пунктирная карточка с кругом и кнопкой */
+.app-shell .empty-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 36px 20px;
+  border-radius: 24px;
+  border: 1px dashed rgba(255, 255, 255, .14);
+  background: #0d0d0d;
+  text-align: center;
+}
+.app-shell .empty-state .icon-svg, .empty-state .icon-svg {
+  width: 30px;
+  height: 30px;
+  color: #6FB6FF;
+}
+.app-shell .empty-state .empty-title, .empty-state .empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+.app-shell .empty-state .cta-primary, .empty-state .cta-primary {
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Строка избранного: фото слева, текстовая часть растягивается, порядок
+   как в макете — название сверху, цена под ним, город внизу. */
+.app-shell .favorite-row > div:nth-child(2), .favorite-row > div:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.app-shell .favorite-row .row-title, .favorite-row .row-title { order: 1; }
+.app-shell .favorite-row .result-price, .favorite-row .result-price { order: 2; margin: 4px 0 0; }
+.app-shell .favorite-row .product-city, .favorite-row .product-city { order: 3; }
+.app-shell .favorite-row .result-thumb, .favorite-row .result-thumb {
+  display: block;
+  flex: 0 0 96px;
+  width: 96px;
+  height: 96px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+.app-shell .favorite-row .result-thumb img, .favorite-row .result-thumb img,
+.app-shell .favorite-row .result-thumb .media-placeholder,
+.favorite-row .result-thumb .media-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  font-size: 11px;
+}
+
+/* Текст в строке избранного переносится, а не уезжает за экран */
+.app-shell .favorite-row, .favorite-row { align-items: center; }
+.app-shell .favorite-row .row-title, .favorite-row .row-title {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+.app-shell .favorite-row > div:nth-child(2), .favorite-row > div:nth-child(2) {
+  overflow: hidden;
+}
+
+/* Название в строке: не больше двух строк по высоте, чтобы не наезжать на цену */
+.app-shell .favorite-row .row-title, .favorite-row .row-title {
+  display: block;
+  max-height: 2.6em;
+  overflow: hidden;
+  -webkit-line-clamp: unset;
+}
+
+/* ── 87. Мои объявления по макету Superdesign ──────────────────────────── */
+/* Фильтры — пилюли, как в макете: активная синяя, остальные тёмные */
+.app-shell .tab-row, .tab-row {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.app-shell .tab-row::-webkit-scrollbar, .tab-row::-webkit-scrollbar { display: none; }
+.app-shell .tab-row > button, .tab-row > button,
+.app-shell .tab-row > .tab, .tab-row > .tab {
+  flex: 0 0 auto;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+  color: rgba(255, 255, 255, .70);
+  font-size: 13px;
+  font-weight: 600;
+  border: 0;
+}
+.app-shell .tab-row > button.is-active, .tab-row > button.is-active,
+.app-shell .tab-row > .tab.is-active, .tab-row > .tab.is-active {
+  background: #1E7BFF;
+  color: #fff;
+}
+
+/* Карточка «моего» объявления: та же строка, что в избранном, плюс статус */
+.app-shell .myad-card .myad-body, .myad-card .myad-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.app-shell .myad-price, .myad-price {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(30, 123, 255, .16);
+  color: #cfe3ff;
+  font-size: 14px;
+  font-weight: 700;
+}
+.app-shell .myad-card .row-title, .myad-card .row-title {
+  font-size: 15px;
+  font-weight: 600;
+  max-height: 2.6em;
+  overflow: hidden;
+}
+.app-shell .myad-card .tool-row, .myad-card .tool-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.app-shell .myad-card .tool-btn, .myad-card .tool-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+/* ── 88. Новости и чаты в общем стиле ──────────────────────────────────── */
+/* Новость: карточка с заголовком, датой и текстом */
+.app-shell .news-card, .news-card,
+.app-shell .news-item, .news-item {
+  padding: 14px;
+  border-radius: 20px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
+  margin-bottom: 10px;
+}
+.app-shell .news-card .row-title, .news-card .row-title,
+.app-shell .news-item .row-title, .news-item .row-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.app-shell .news-card .plan-desc, .news-card .plan-desc,
+.app-shell .news-item .plan-desc, .news-item .plan-desc {
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, .60);
+}
+.app-shell .news-card .product-city, .news-card .product-city,
+.app-shell .news-item .product-city, .news-item .product-city {
+  margin-top: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, .35);
+}
+
+/* Чат: строка с аватаром, именем, последним сообщением и временем */
+.app-shell .chat-row, .chat-row,
+.app-shell .dialog-row, .dialog-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #141414;
+  margin-bottom: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+.app-shell .chat-row .row-title, .chat-row .row-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+.app-shell .chat-row .plan-desc, .chat-row .plan-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .45);
+  max-height: 2.6em;
+  overflow: hidden;
+}
+
+/* ── 89. Блок оплаты по макету Superdesign ────────────────────────────────
+   В макете условия — мелкая ссылка под кнопкой, не полотно перед ней.
+   Оставляем текст на месте (требование CISPay), но делаем его тише:
+   мелкий шрифт, приглушённый цвет, заголовок капсом-ссылкой. */
+.app-shell .pay-legal, .pay-legal {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .03);
+  box-shadow: none;
+}
+.app-shell .pay-legal-title, .pay-legal-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .45px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .40);
+  margin-bottom: 8px;
+}
+.app-shell .pay-legal-list, .pay-legal-list {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .45);
+}
+.app-shell .pay-legal-list li, .pay-legal-list li { margin-bottom: 6px; }
+.app-shell .pay-legal-muted, .pay-legal-muted,
+.app-shell .pay-legal-requisites, .pay-legal-requisites {
+  font-size: 11px;
+  color: rgba(255, 255, 255, .30);
+}
+/* Кнопка оплаты — главный элемент экрана */
+.app-shell .page-narrow .cta-primary, .page-narrow .cta-primary {
+  height: 50px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ── 90. Примеры критериев на экране поиска ─────────────────────────────── */
+.app-shell .hunt-examples, .hunt-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.app-shell .hunt-example, .hunt-example {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: #141414;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
+  color: rgba(255, 255, 255, .82);
+  font-size: 14px;
+  font-weight: 500;
+  border: 0;
+}
+
+/* ── 91. Что проверяется по критериям ───────────────────────────────────── */
+.app-shell .crit-checks, .crit-checks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 4px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .03);
+  font-size: 12px;
+  color: rgba(255, 255, 255, .62);
+}
+.app-shell .crit-checks-title, .crit-checks-title {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .45px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, .38);
+}
+.app-shell .crit-checks .muted, .crit-checks .muted { color: rgba(255, 255, 255, .38); }
+.app-shell .crit-checks span:not(.crit-checks-title):not(.muted), .crit-checks span {
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+}
+.app-shell .crit-checks .crit-checks-title, .crit-checks .crit-checks-title {
+  height: auto;
+  padding: 0;
+  background: transparent;
+}
